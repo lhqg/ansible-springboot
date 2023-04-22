@@ -25,6 +25,7 @@ sb_extra_files_dest: "{{ sb_jar_location }}"
 sb_appbase_mode: "0750"
 
 sb_listen_port: 8443
+#sb_monitoring_port: 
 
 sb_memory_max_heapsize_mb: 768
 sb_memory_min_heapsize: 384
