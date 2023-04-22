@@ -53,7 +53,7 @@
     setype: springboot_var_t
   become: "{{ sb_become }}"
 
-- name: "Create {{ sb_appname }} dynamic libraries directory sb_srv_dir={{ sb_srv_dir }}"
+- name: "Create {{ sb_appname }} dynamic libraries directory {{ sb_srv_dir }}/dynlib"
   file:
     path: "{{ sb_srv_dir }}/dynlib"
     state: directory
