@@ -51,21 +51,21 @@ sb_enable_dynlibs: false
 sb_run_dir: "{{ sb_appbase }}/run"
 sb_run_dir_mode: "0750"
 
-# dir&files permissions for "{{ sb_jar_location }}/" & "{{ sb_jar_location }}/{{ sb_appjarname }}"
-# ( ! one should be sure that the running user have access to this location ! )
+# dir/files permissions for "{{ sb_jar_location }}/" & "{{ sb_jar_location }}/{{ sb_appjarname }}"
+# ( of course, the user running the application must be able to read)
 sb_app_mode: "0750"
 
-# dir&files permissions for "{{ sb_appbase_conf_location }}/" , "{{ sb_appbase_conf_location }}//each_copied_conf-dir/" & "{{ sb_appbase_conf_location }}//each_copied_conf-dir/each_copied_conf-file":
+# dir/files permissions for "{{ sb_appbase_conf_location }}/" , "{{ sb_appbase_conf_location }}//each_copied_conf-dir/" & "{{ sb_appbase_conf_location }}//each_copied_conf-dir/each_copied_conf-file":
 sb_conf_mode: "0750"
 
 # dir permissions and retention for "{{ sb_log_dir }}/" used to store the running jar logs
 sb_log_dir_mode: "0750"
 sb_log_dir_retention_days: 30
 
-# dir&files permissions for "{{ sb_extra_files_dest }}/" && "{{ sb_extra_files_dest }}/each_copied_extra_file"
+# dir/files permissions for "{{ sb_extra_files_dest }}/" && "{{ sb_extra_files_dest }}/each_copied_extra_file"
 sb_extra_files_mode: "0750"
 
-# dir&files permissions for "{{ sb_keystores_dest }}/" && "{{ sb_keystores_dest }}/each_copied_keystore_file"
+# dir/files permissions for "{{ sb_keystores_dest }}/" && "{{ sb_keystores_dest }}/each_copied_keystore_file"
 sb_keystores_mode: "0750"
 
 sb_undeploy: false

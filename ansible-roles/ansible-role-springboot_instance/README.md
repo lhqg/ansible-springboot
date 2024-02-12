@@ -56,57 +56,79 @@ If you don't want the handlers to be run at the end of the role execution, you s
 
 ```yaml
 ---
+---
 # Definition of defaults file for ansible-role-springboot_instance
+
+sb_become: yes
+
+sb_root: /opt/springboot
+sb_logroot: /var/log/springboot
+sb_srvroot: "/srv/springboot"
 
 sb_workdir: /var/tmp/springboot
 sb_appbase: "/opt/springboot/{{ sb_appname }}"
+
+sb_service_env_filename: "/opt/springboot/{{ sb_appname }}/env"
+
 sb_jar_location: "{{ sb_appbase }}/lib"
 sb_conf_src: "{{ playbook_dir }}/files/conf"
 sb_appbase_conf_location: "{{ sb_appbase }}/conf"
+sb_java_security_file: "{{ sb_appbase_conf_location }}/java.security"
+sb_keystores_dest: "{{ sb_appbase }}/keys"
 sb_log_dir: "/var/log/springboot/{{ sb_appname }}"
-sb_run_dir: "{{ sb_appbase }}/run"
-sb_java_home: "/usr"
+sb_srv_dir: "/srv/springboot/{{ sb_appname }}"
 sb_run_handlers: yes
 sb_cleanup_entire_workdir: no
 sb_extra_files_dest: "{{ sb_jar_location }}"
 sb_appbase_mode: "0750"
 
-sb_start_at_boot: yes
-sb_become: yes
-sb_user: springboot
-sb_group: springboot
+sb_listen_port: 8443
+#sb_monitoring_port: 
 
+sb_memory_max_heapsize_mb: 768
+sb_memory_min_heapsize_mb: 384
+sb_memory_stacksize_kb: 220
+sb_memory_hugepages: no
+
+sb_i18n_lang: "en_US.UTF-8"
+
+sb_enable_service: yes
+sb_startup_timeout_sec: 10
+sb_app_log_file: "{{ sb_log_dir }}/{{ sb_appname }}-{{ sb_app_version }}.log"
+
+sb_java_version: 11
+sb_java_flavour: "openjdk"
 sb_java_extra_args: ""
+sb_java_tmpdir: "{{ sb_srv_dir }}"
 sb_log_symlink: no
 sb_prop_logging_path: "{{ sb_log_dir }}"
 
-# dir&files permissions for "{{ sb_appbase }}/bin/" & "{{ sb_appbase }}/bin/{{ sb_service_script_filename }}":
-sb_bin_mode: "0750"
+sb_enable_dynlibs: false
 
-# dir permissions for "{{ sb_appbase }}/run/" used to store transient files
+# dir permissions for "{{ sb_appbase }}/run/" used to store the running transient files
+sb_run_dir: "{{ sb_appbase }}/run"
 sb_run_dir_mode: "0750"
 
-# dir&files permissions for "{{ sb_jar_location }}/" & "{{ sb_jar_location }}/{{ sb_appjarname }}"
-# ( ! one should be sure that the running user have access to this location ! )
+# dir/files permissions for "{{ sb_jar_location }}/" & "{{ sb_jar_location }}/{{ sb_appjarname }}"
+# ( of course, the user running the application must be able to read)
 sb_app_mode: "0750"
 
-# dir&files permissions for "{{ sb_appbase_conf_location }}/" , "{{ sb_appbase_conf_location }}//each_copied_conf-dir/" & "{{ sb_appbase_conf_location }}//each_copied_conf-dir/each_copied_conf-file":
+# dir/files permissions for "{{ sb_appbase_conf_location }}/" , "{{ sb_appbase_conf_location }}//each_copied_conf-dir/" & "{{ sb_appbase_conf_location }}//each_copied_conf-dir/each_copied_conf-file":
 sb_conf_mode: "0750"
 
-# dir permissions for "{{ sb_log_dir }}/" used to store the running jar log files
+# dir permissions and retention for "{{ sb_log_dir }}/" used to store the running jar logs
 sb_log_dir_mode: "0750"
+sb_log_dir_retention_days: 30
 
-# dir&files permissions for "{{ sb_extra_files_dest }}/" && "{{ sb_extra_files_dest }}/each_copied_extra_file"
+# dir/files permissions for "{{ sb_extra_files_dest }}/" && "{{ sb_extra_files_dest }}/each_copied_extra_file"
 sb_extra_files_mode: "0750"
 
-# dir&files permissions for "{{ sb_keystores_dest }}/" && "{{ sb_keystores_dest }}/each_copied_keystore_file"
+# dir/files permissions for "{{ sb_keystores_dest }}/" && "{{ sb_keystores_dest }}/each_copied_keystore_file"
 sb_keystores_mode: "0750"
 
-# settings for undeploy of your springboot application
 sb_undeploy: false
 sb_remove_extra_files: false
 sb_remove_keystores: false
-
 
 ```
 
@@ -140,9 +162,9 @@ sb_remove_keystores: false
 
 ```yaml
 ---
-sb_appname: HelloWorldExample
+sb_appname: MyApp
 sb_app_version: 1.0.0
-sb_appjarname: "HelloWorldExample-{{ sb_app_version }}.jar"
+sb_appjarname: "MyApp-{{ sb_app_version }}.jar"
 sb_keystores_src: "{{ playbook_dir }}/files/keys"
 sb_keystores_dest: "{{ sb_appbase }}/keys"
 sb_java_extra_args: "-Dserver.ssl.key-store=file:{{ sb_keystores_dest }}/{{ sb_appname }}_keystore1.jks -Dserver.ssl.key-store-password={{ my_app_keystore_vault_password_var }}"
