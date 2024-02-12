@@ -3,49 +3,43 @@ ansible-role-springboot_instance
 
 An Ansible role that deploys Springboot an application instance.
 
-> **Disclaimer:**
->
-> - The stable versions of the role are tagged. You can find all the available tags with their release notes under Repository/Tags. When you import the role in the requirements.yml file we recommend to use a tagged version of the role.
-> - You may find the release notes & the a migration guide for the latest versions in the [release-notes.md](release-notes.md) file.
-
 Requirements
 -------------
 
 - The `ansible-role-springboot_foundation` ran successfully,
-- The springboot application is being installed as a service (not if `sb_become` is set on no/false),
+- The springboot application is being installed as a service,
 - The application JAR file must be downloaded previously to `sb_workdir` by the playbook,
 - The configuration files should be stored/downloaded to {{ playbook_dir }}/files/conf. Also, they should be templated.
-- Java must be installed [ unless it is provided in the jar ],
-- Make sure that the `sb_log_dir` resides outside of the springboot appbase.
-- Make sure that the `sb_user` that you defined exists on the testing environment.
-- This Role requires "root" access to install and manage services, also for setting different rights for files & folders ! To avoid that (in case the remote user doesn't have access as root on the server), one (the user, role consumer) should set `sb_become`=no(or false) !
+- This Role requires "root" access to manage services and to perform SELinux labelling of resources.
 
 Role Variables
 ---------------
 
+IMPORTANT: for all `*_mode` variables, the value MUST be surrounded with quotes (") and MUST be specified with 4 octal digit
+
 - Default variables (from defaults/main.yml):
   - `sb_workdir`: The path where the artifacts are being downloaded on the target machines. Default: "/var/tmp/springboot"
   - `sb_appbase`: The path where the app will reside. Default: "/opt/springboot/`sb_appname`"
-  - `sb_appbase_mode`: The dir-mode permission for `sb_appbase`. Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_appbase_mode`: The dir-mode permission for `sb_appbase`. Default: "0750"
   - `sb_jar_location`: The destination path where the *JAR application* will reside. Default: "`sb_appbase`/lib"
-  - `sb_app_mode`: The dir & files mode permission for the JAR application destination location ("`sb_jar_location`/" & "`sb_jar_location`/`sb_appjarname`"). Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_app_mode`: The dir & files mode permission for the JAR application destination location ("`sb_jar_location`/" & "`sb_jar_location`/`sb_appjarname`"). Default: "0750"
   - `sb_conf_src`: As the configuration files are stored in the playbook, they should be jinja2 templates in the playbook at this path "{{ playbook_dir }}/files/conf" and set the values for the configuration properties in them. Default value: "`playbook_dir`/files/conf" ("{{ playbook_dir }}/files/conf").
   - `sb_appbase_conf_location`: The destination path of the configuration files. Default: "`sb_appbase`/conf"
-  - `sb_conf_mode`: The dir & files mode permission for the `sb_appbase_conf_location` and each copied conf dir & file from `sb_conf_src` to `sb_appbase_conf_location`/. Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_conf_mode`: The dir & files mode permission for the `sb_appbase_conf_location` and each copied conf dir & file from `sb_conf_src` to `sb_appbase_conf_location`/. Default: "0750"
   - `sb_java_extra_args`: Extra arguments when starting the java application. For example: "-Dproperty=value". It is used in the `springboot_rc_service.j2` template file. Default value: "" (See: [Example playbook](#example) & [Using Keystores](#keystore))
   - `sb_enable_service`: Set this on "yes" if you want to let the springboot server to be started at the boot-time (unused if `sb_become` is no/false). Default value: "yes".
-  - `sb_log_dir_mode`: The dir mode permission for the log folder. Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_log_dir_mode`: The dir mode permission for the log folder. Default: "0750"
   - `sb_log_symlink`: If set to `true` a symbolic link named `logs` will be created under `sb_appbase` which points to `sb_log_dir`. Default: `no`.
-  - `sb_become`: Should the role try to switch the UNIX-user to root to be able to install & manage the springboot application service, and set some ownerships for some directories & files ? If one (the user, role consumer) sets `sb_become` on `no` or `false`, the springboot application cannot be started as a service (the role will skip service implementation), this the application cannot be started at boot time (`sb_enable_service` will have no effect), also the the owership of some files through `sb_*_user` & `sb_*_group` (the group may be set in some situations when the unix-user is in multiple unix-groups and the one selects one of them), **but the application will be started at role deploytime through the direct call of the script `sb_service_script_filename`**. Default value: "yes"
-  - `sb_run_dir`: The destination path where the service of the application may store transient files whilethe application runs. Default: "`sb_appbase`/run"
-  - `sb_run_dir_mode`: The dir mode permission for the run folder `sb_run_dir` where transient files will reside. Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_become`: Whether the role becomes `root` to create and manage Springboot application systemd units and to perform SELinux labelling of resources.
+  - `sb_run_dir`: The destination path where the service of the application may store transient files while the application runs. Default: "`sb_appbase`/run"
+  - `sb_run_dir_mode`: The dir mode permission for the run folder `sb_run_dir` where transient files will reside. Default: "0750"
   - `sb_java_home`: The path to java. Default value: "/usr".
   - `sb_run_handlers`: Should run `Start Springboot Server` (or `Start Springboot Server (via script)`) and `Cleanup workdir` handlers automatically, or not. Default value: "yes".
   - `sb_cleanup_entire_workdir`: Should remove the entire `sb_workdir` (not only the file `sb_workdir`/`sb_appjarname`), or not. Default value: "no". (**This works only if `sb_run_handlers` is set on "yes" ("true") !**)
-  - `sb_bin_mode`: The dir & files mode permission for "`sb_appbase`/bin/" & "`sb_appbase`/bin/`sb_service_script_filename`". Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_bin_mode`: The dir & files mode permission for "`sb_appbase`/bin/" & "`sb_appbase`/bin/`sb_service_script_filename`". Default: "0750"
   - `sb_extra_files_dest`: The destination location of some extra binary files that may be needed by the JAR application. Default: `sb_jar_location` (See the optional `sb_extra_files_src` variable described below in the section ["Other variables that may optionally be added/changed:"](#optional))
-  - `sb_extra_files_mode`: The dir & files modes of the destination folder for extra binary files that may be needed by the aplpication. Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
-  - `sb_keystores_mode`: The mode of the folder & files to be copied from `sb_keystores_src` (local project path) to `sb_keystores_dest` (on the remote target servers) in case those are set. Default: "0750" (**Please make sure the value is surrounded with quote marks if the value is prefixed with "0" !**)
+  - `sb_extra_files_mode`: The dir & files modes of the destination folder for extra binary files that may be needed by the aplpication. Default: "0750"
+  - `sb_keystores_mode`: The mode of the folder & files to be copied from `sb_keystores_src` (local project path) to `sb_keystores_dest` (on the remote target servers) in case those are set. Default: "0750"
   - `sb_prop_logging_path`: Variable to pass the spring boot system property for logging path. It's the equivalent of the application property `logging.file.path`. If you override this variable, make sure to don't put the logs into the `appbase` directory as this is removed at the beginning of the role execution. (**This is used only by the default `springboot_rc_service.j2`**).Default: the value of the variable: `sb_log_dir`
   - `sb_undeploy`: Variable used for in case you want to undeploy the spring boot application. Default value: false
     Remark: Currently only supported on RHEL7 and RHEL8.
@@ -155,12 +149,6 @@ sb_java_extra_args: "-Dserver.ssl.key-store=file:{{ sb_keystores_dest }}/{{ sb_a
 sb_cleanup_entire_workdir: yes
 ```
 
-Example playbook
------------------
-
-- For *Gitlab* users, a playbook example which uses this role can be found in this [Springboot test playbook project](https://gitlab.ing.net/CDAns/ansible-playbook-springboot-test).
-- For *Azure Devops* users, a playbook example which uses this role can be found in this [Springboot test playbook project](https://dev.azure.com/INGCDaaS/IngOne/_git/P02316-ansible-playbook-springboot-test).
-
 Role execution flow
 --------------------
 
@@ -178,24 +166,7 @@ At runtime, the role will perform the following actions:
 Dependencies
 -------------
 
-- RHEL7 or 8 (might work with any Linux distro, if `sb_become` is set on `no`/`false` => no Linux service will be used)
+- RHEL style distribution, version 7.x to 9.x
 - Ansible role ansible-role-springboot_foundation
 - `ansible` version >= 2.5.0
-- `java` JRE or JDK (e.g. java-1.8.0-oracle-1.8.0.191-1jpp.1.el7.x86_64), version depending of your APP (see `sb_java_home`)
-- linux (RHEL) packages: `bash`, `procps`
-- linux (RHEL) packages: `chkconfig` for *RHEL6* or `systemd` for *RHEL7* and *RHEL8*, if `sb_become` & `sb_run_handlers` are set on `yes`/`true`
-- optionally: maybe `filesystem` package (for `/proc/`), or `proc` to exist in mounted filesystems (in case `sb_become` is `no`/`false`, check if the remote user have access on `/proc/` !)
-
-Usage
------
-
-Via `requirements.yml`:
-
-```yaml
----
-
-- name: ansible-role-springboot_instance
-  scm: git
-  version: a tag of the role
-
-```
+- ability to become root

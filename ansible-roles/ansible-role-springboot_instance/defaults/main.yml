@@ -28,11 +28,11 @@ sb_listen_port: 8443
 #sb_monitoring_port: 
 
 sb_memory_max_heapsize_mb: 768
-sb_memory_min_heapsize: 384
+sb_memory_min_heapsize_mb: 384
 sb_memory_stacksize_kb: 220
 sb_memory_hugepages: no
 
-sb_i18n_lang: en_US.UTF-8
+sb_i18n_lang: "en_US.UTF-8"
 
 sb_enable_service: yes
 sb_startup_timeout_sec: 10

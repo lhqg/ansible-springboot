@@ -28,7 +28,7 @@ LOG_PATH=${LOG_DIR}
 JAVA_TMPDIR=${VAR_DIR}/temp
 
 # Memory options for the JVM
-JVM_MEM_OPTS="-Xmx{{ sb_memory_max_heapsize_mb }}m -Xms{{ sb_memory_min_heapsize }}m -Xss{{ sb_memory_stacksize_kb }}k"
+JVM_MEM_OPTS="-Xmx{{ sb_memory_max_heapsize_mb }}m -Xms{{ sb_memory_min_heapsize_mb }}m -Xss{{ sb_memory_stacksize_kb }}k"
 {% if sb_memory_hugepages -%}
 JVM_MEM_OPTS="${JVM_MEM_OPTS} -XX:+UseLargePages"
 {% endif %}
