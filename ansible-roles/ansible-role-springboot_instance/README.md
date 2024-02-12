@@ -87,6 +87,7 @@ If you don't want the handlers to be run at the end of the role execution, you s
 
 ```yaml
 ---
+---
 # Definition of defaults file for ansible-role-springboot_instance
 
 sb_become: yes
@@ -96,17 +97,28 @@ sb_logroot: /var/log/springboot
 sb_srvroot: "/srv/springboot"
 
 sb_workdir: /var/tmp/springboot
+<<<<<<< HEAD
 sb_appbase: "{{ sb_root }}/springboot/{{ sb_appname }}"
 
 sb_service_env_filename: "{{ sb_root }}/springboot/{{ sb_appname }}/env"
+=======
+sb_appbase: "/opt/springboot/{{ sb_appname }}"
+
+sb_service_env_filename: "/opt/springboot/{{ sb_appname }}/env"
+>>>>>>> 83accc7 (Improve documentation)
 
 sb_jar_location: "{{ sb_appbase }}/lib"
 sb_conf_src: "{{ playbook_dir }}/files/conf"
 sb_appbase_conf_location: "{{ sb_appbase }}/conf"
 sb_java_security_file: "{{ sb_appbase_conf_location }}/java.security"
 sb_keystores_dest: "{{ sb_appbase }}/keys"
+<<<<<<< HEAD
 sb_log_dir: "{{ sb_logroot }}/{{ sb_appname }}"
 sb_srv_dir: "{{ sb_srvroot }}/{{ sb_appname }}"
+=======
+sb_log_dir: "/var/log/springboot/{{ sb_appname }}"
+sb_srv_dir: "/srv/springboot/{{ sb_appname }}"
+>>>>>>> 83accc7 (Improve documentation)
 sb_run_handlers: yes
 sb_cleanup_entire_workdir: no
 sb_extra_files_dest: "{{ sb_jar_location }}"
@@ -124,6 +136,10 @@ sb_i18n_lang: "en_US.UTF-8"
 
 sb_enable_service: yes
 sb_startup_timeout_sec: 10
+<<<<<<< HEAD
+=======
+sb_app_log_file: "{{ sb_log_dir }}/{{ sb_appname }}-{{ sb_app_version }}.log"
+>>>>>>> 83accc7 (Improve documentation)
 
 sb_java_version: 11
 sb_java_flavour: "openjdk"
