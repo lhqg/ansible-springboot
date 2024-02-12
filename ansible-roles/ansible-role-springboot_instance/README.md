@@ -45,7 +45,6 @@ IMPORTANT: for all `*_mode` variables, the value MUST be surrounded with quotes 
   - `sb_extra_files_dest`: The destination location of some extra binary files that may be needed by the JAR application. Default: `sb_jar_location` (See the optional `sb_extra_files_src` variable described below in the section ["Other variables that may optionally be added/changed:"](#optional))
   - `sb_extra_files_mode`: The dir & files modes of the destination folder for extra binary files that may be needed by the aplpication. Default: "0750"
   - `sb_keystores_mode`: The mode of the folder & files to be copied from `sb_keystores_src` (local project path) to `sb_keystores_dest` (on the remote target servers) in case those are set. Default: "0750"
-  - `sb_prop_logging_path`: Variable to pass the spring boot system property for logging path. It's the equivalent of the application property `logging.file.path`. If you override this variable, make sure to don't put the logs into the `appbase` directory as this is removed at the beginning of the role execution. (**This is used only by the default `springboot_rc_service.j2`**).Default: the value of the variable: `sb_log_dir`
   - `sb_undeploy`: Variable used for in case you want to undeploy the spring boot application. Default value: false
     Remark: Currently only supported on RHEL7 and RHEL8.
   - `sb_remove_extra_files`: Variable used to indicate if you want to remove the extra files, the parameter is only effective in combination with `sb_undeploy`. It can be the case you copied the files to a filelocation other then (or a sub folder of) `sb_appbase`. In that case you can set the variable to `true` and the files within the `sb_extra_files_dest` will be removed, based on the matching files indicated by `sb_extra_files_src`. Default value: `false`
@@ -105,7 +104,6 @@ sb_java_flavour: "openjdk"
 sb_java_extra_args: ""
 sb_java_tmpdir: "{{ sb_srv_dir }}"
 sb_log_symlink: no
-sb_prop_logging_path: "{{ sb_log_dir }}"
 
 sb_enable_dynlibs: false
 

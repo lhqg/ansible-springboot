@@ -43,7 +43,6 @@ sb_java_flavour: "openjdk"
 sb_java_extra_args: ""
 sb_java_tmpdir: "{{ sb_srv_dir }}"
 sb_log_symlink: no
-sb_prop_logging_path: "{{ sb_log_dir }}"
 
 sb_enable_dynlibs: false
 
