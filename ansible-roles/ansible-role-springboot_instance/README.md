@@ -15,6 +15,11 @@ Requirements
 Role Variables
 ---------------
 
+- Variables which **MUST** be defined at the playbook level:
+  - `sb_appname`: The name of the application
+  - `sb_app_version`: Version of the application
+  - `sb_appjarname`: The JAR application name
+
 IMPORTANT: for all `*_mode` variables, the value MUST be surrounded with quotes (") and MUST be specified with 4 octal digit
 
 - Default variables (from defaults/main.yml):
@@ -55,7 +60,6 @@ If you don't want the handlers to be run at the end of the role execution, you s
 ```
 
 ```yaml
----
 ---
 # Definition of defaults file for ansible-role-springboot_instance
 
@@ -132,10 +136,8 @@ sb_remove_keystores: false
 
 ```
 
-- Playbook variables which **MUST** be defined at playbook level:
-  - `sb_appname`: The name of the application.
-  - `sb_app_version`: Version of the application
-  - `sb_appjarname`: The JAR application name
+Optional variables
+------------------
 
 - <a name="optional">Other variables that may optionally be added/changed:</a>
   - `sb_extra_files_src`: The source location of some extra binary files that may be needed by the application. Recommended value: "`playbook_dir`/files/extra".
