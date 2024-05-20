@@ -77,7 +77,7 @@ IMPORTANT: for all `*_mode` variables, the value MUST be surrounded with quotes 
   - `sb_remove_extra_files`: Triggers the removal of files/directories under `sb_extra_files_dest` when `sb_undeploy` is set to `true`. (Default value: `false`)
   - `sb_remove_keystores`: Triggers the removal of files/directories under `sb_keystores_dest` when `sb_undeploy` is set to `true`. (Default value: `false`)
 
-If you don't want the handlers to be run at the end of the role execution, you should set the variable for the `sb_run_handlers` to false. However, if you want to run the handlers afterwards, the first task that is executed after the role should set the value for this variable to true.
+If you don't want the handlers to be run at the end of the role execution, you should set the variable for the `sb_run_handlers` to `false`. However, if you want to run the handlers afterwards, the first task that is executed after the role should set the value for this variable to true.
 
 ```yaml
   post_tasks:
