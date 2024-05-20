@@ -1,3 +1,11 @@
+![GitHub Release (latest SemVer)](https://img.shields.io/github/v/release/hubertqc/ansible-springboot)
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![GitHub Issues](https://img.shields.io/github/issues/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/issues)
+[![GitHub PR](https://img.shields.io/github/issues-pr/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/pulls)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/commits/main)
+[![GitHub Last commit](https://img.shields.io/github/last-commit/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/commits/main)
+![GitHub Downloads](https://img.shields.io/github/downloads/hubertqc/ansible-springboot/total)
+
 # Ansible roles to deploy Springboot applications on Linux
 
 ## Table of Contents
@@ -66,7 +74,7 @@ expenses.
 
 The Author(s) of this Ansible roles SHALL NOT be held liable nor accountable, in
  any way, of any malfunction or limitation of said module, nor of the resulting damage, of
- any kind, resulting, directly or indirectly, of the usage of this Puppet module.
+ any kind, resulting, directly or indirectly, of the usage of this Ansible roles.
 
 It is strongly advised to always use the last version of the code, to check for the
 compatibility of the platform where it is about to be deployed, to compile the module on
