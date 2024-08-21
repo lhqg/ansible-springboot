@@ -1,12 +1,11 @@
 ---
-
-- name : "Restore SELinux fcontexts for {{ sbi_appname }}"
-  shell: >
+- name: "Restore SELinux fcontexts for {{ sbi_appname }}"
+  ansible.builtin.shell: >
         /bin/bash -c "/sbin/restorecon -RFi {{ sbi_appbase }} {{ sbi_log_dir }} {{ sbi_srv_dir }}"
   become: "{{ sbi_become }}"
 
 - name: "Add SELinux type to listen port {{ sbi_listen_port }}"
-  seport:
+  community.general.seport:
     ports: "{{ sbi_listen_port }}"
     proto: tcp
     setype: springboot_port_t
@@ -14,7 +13,7 @@
   become: "{{ sbi_become }}"
 
 - name: "Add SELinux type to monitoring port {{ sbi_monitoring_port }}"
-  seport:
+  community.general.seport:
     ports: "{{ sbi_monitoring_port }}"
     proto: tcp
     setype: springboot_monitoring_port_t
@@ -23,9 +22,9 @@
   when: sbi_monitoring_port is defined
 
 - name: "Switch SELinux boolean to allow Springboot application to create and map/execute dynamic libraries"
-  seboolean:
+  community.general.seboolean:
     name: allow_springboot_dynamic_libs
-    state: yes
-    persistent: yes
+    state: true
+    persistent: true
   become: "{{ sbi_become }}"
   when: sbi_enable_dynlibs is defined and sbi_enable_dynlibs

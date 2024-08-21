@@ -1,5 +1,6 @@
+---
 - name: "Install java"
-  package:
+  ansible.builtin.package:
     name: java-{{ sbi_java_version }}-{{ sbi_java_flavour }}-headless.x86_64
     state: present
   become: "{{ sbi_become }}"
@@ -12,4 +13,3 @@
     src: "/etc/alternatives/jre_{{ sbi_java_version }}_{{ sbi_java_flavour }}"
   become: "{{ sbi_become }}"
   when: sbi_java_flavour != "oracle" and sbi_java_version > 8
-

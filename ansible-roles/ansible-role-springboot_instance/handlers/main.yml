@@ -1,27 +1,23 @@
 ---
-- name: "Restore SELinux file contexts for Springboot instance"
-  shell: >
-    /bin/bash -c "/usr/sbin/restorecon -RFi {{ sbi_appbase }} {{ sbi_log_dir }} {{ sbi_srv_dir }}"
-  become: "{{ sbi_become }}"
-  listen: "restorecon_springboot_instance"
-
 - name: "Start Springboot instance"
-  service:
+  ansible.builtin.service:
     name: "{{ sbi_service_name }}"
     state: started
   become: "{{ sbi_become }}"
   when: sbi_run_handlers and sbi_become
 
 - name: "Restart Springboot instance"
-  service:
+  ansible.builtin.service:
     name: "{{ sbi_service_name }}"
     state: restarted
   become: "{{ sbi_become }}"
   when: sbi_become
 
 - name: "Cleanup workdir"
-  file:
-    path: "{{ sbi_workdir }}/{{ sbi_appjarname if sbi_cleanup_entire_workdir is not defined or not sbi_cleanup_entire_workdir else '' }}"
+  ansible.builtin.file:
+    path: "{{ sbi_workdir }}/{{ sbi_appjarname
+      if (sbi_cleanup_entire_workdir is not defined or not sbi_cleanup_entire_workdir)
+      else '' }}"
     state: absent
   become: "{{ sbi_become }}"
   when: sbi_run_handlers

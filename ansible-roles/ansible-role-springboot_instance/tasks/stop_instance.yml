@@ -7,34 +7,37 @@
 
 # Attempt to stop the existing service
 
-- block:
-    - name: "Check service-file (systemd unit-file) status" # do not confuse this with the service status !
-      systemd:
+- name: "Orderly attempt to stop systemd unit {{ sbi_servicename }}"
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version|int >= 7
+    - sbi_become
+  block:
+    # do not confuse this with the service status !
+    - name: "Check service-file (systemd unit-file) status"
+      ansible.builtin.systemd:
         name: "{{ sbi_service_name }}"
       become: "{{ sbi_become }}"
       register: sbi_systemd_result
 
     # Stop1: First trial to stop the Springboot instance
     - name: "Stop Springoot instance (RHEL 7/8)"
-      systemd:
+      ansible.builtin.systemd:
         name: "{{ sbi_service_name }}"
         state: stopped
       become: "{{ sbi_become }}"
       register: sbi_service_stop
       when:
-        - sbi_systemd_result is defined and sbi_systemd_result.status is defined and sbi_systemd_result.status.UnitFileState is defined and sbi_systemd_result.status.UnitFileState == 'enabled'
+        - sbi_systemd_result is defined and sbi_systemd_result.status is defined
+        - sbi_systemd_result.status.UnitFileState is defined and sbi_systemd_result.status.UnitFileState == 'enabled'
 
     - name: "Output of stop attempt using systemd"
-      debug:
+      ansible.builtin.debug:
         var: sbi_service_stop
-  when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version|int >= 7
-    - sbi_become
 
 # Stop2 (last chance): Try to stop any Java process with the AppName
 - name: "Stop the Springboot Server (via process identification), using pkill command for any java process started with our app_name as argument"
-  shell: pkill -f '^([^/]*/)*java\s+(.*?\s+)?-DAPP_NAME={{ sbi_appname | regex_escape() }}(\s+.*)?$'
+  ansible.builtin.shell: pkill -f '^([^/]*/)*java\s+(.*?\s+)?-DAPP_NAME={{ sbi_appname | regex_escape() }}(\s+.*)?$'
   become: "{{ sbi_become }}"
   register: sbi_pkill_output_cmd
   failed_when: sbi_pkill_output_cmd.stderr_lines|length > 0

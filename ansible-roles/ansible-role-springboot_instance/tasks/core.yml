@@ -1,32 +1,31 @@
 ---
 - name: "Check if variables are defined"
-  include_tasks: check_variables.yml
+  ansible.builtin.include_tasks: check_variables.yml
 
 - name: "Attempt to stop Springboot instance {{ sbi_appname }}"
-  include_tasks: stop_instance.yml
+  ansible.builtin.include_tasks: stop_instance.yml
 
 - name: "SELinux typing"
-  include_tasks: selinux.yml
+  ansible.builtin.include_tasks: selinux.yml
 
 - name: "Install Java packages"
-  include_tasks: java.yml
+  ansible.builtin.include_tasks: java.yml
 
 - name: "Create directories for {{ sbi_appname }}"
-  include_tasks: directories.yml
+  ansible.builtin.include_tasks: directories.yml
 
 - name: "Register Springboot service (RHEL 7 and higher)"
-  include_tasks: configure_service.yml
+  ansible.builtin.include_tasks: configure_service.yml
   when:
     - ansible_os_family == "RedHat"
     - ansible_distribution_major_version|int >= 7
     - sbi_become
 
 - name: "Deploy application {{ sbi_appname }} files"
-  include_tasks: app_deploy.yml
+  ansible.builtin.include_tasks: app_deploy.yml
 
 - name: "Audit rules for {{ sbi_appname }}"
-  include_tasks: audits.yml
+  ansible.builtin.include_tasks: audits.yml
 
 - name: "Cron to purge {{ sbi_appname }} logs"
-  include_tasks: cron.yml
-
+  ansible.builtin.include_tasks: cron.yml

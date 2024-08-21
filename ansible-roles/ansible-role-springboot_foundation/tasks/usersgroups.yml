@@ -1,15 +1,15 @@
 ---
-- name: Ensure group "springboot" exists with correct GID
+- name: "Ensure group 'springboot' exists with correct GID"
   ansible.builtin.group:
     name: springboot
     state: present
-    gid: {{ sbf_group_id }}
+    gid: "{{ sbf_group_id }}"
   become: "{{ sbf_become }}"
 
-- name: Ensure user "springboot" exists with correct UID/GID
+- name: "Ensure user 'springboot' exists with correct UID/GID"
   ansible.builtin.user:
     name: springboot
-    uid: {{ sbf_user_id }}
+    uid: "{{ sbf_user_id }}"
     group: springboot
     shell: /sbin/nologin
     password: '!'

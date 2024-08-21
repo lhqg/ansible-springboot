@@ -1,7 +1,7 @@
 ---
 # Definition of defaults file for ansible-role-springboot_instance
 
-sbi_become: yes
+sbi_become: true
 
 sbi_workdir: /var/tmp/springboot
 sbi_appbase: "/opt/springboot/{{ sbi_appname }}"
@@ -15,51 +15,58 @@ sbi_java_security_file: "{{ sbi_appbase_conf_location }}/java.security"
 sbi_keystores_dest: "{{ sbi_appbase }}/keys"
 sbi_log_dir: "/var/log/springboot/{{ sbi_appname }}"
 sbi_srv_dir: "/srv/springboot/{{ sbi_appname }}"
-sbi_run_handlers: yes
-sbi_cleanup_entire_workdir: no
+sbi_run_handlers: true
+sbi_cleanup_entire_workdir: false
 sbi_extra_files_dest: "{{ sbi_jar_location }}"
 sbi_appbase_mode: "0750"
 
 sbi_listen_port: 8443
-#sbi_monitoring_port: 
+sbi_monitoring_port: ~
 
 sbi_memory_max_heapsize_mb: 768
 sbi_memory_min_heapsize_mb: 384
 sbi_memory_stacksize_kb: 220
-sbi_memory_hugepages: no
+sbi_memory_hugepages: false
 
 sbi_i18n_lang: "en_US.UTF-8"
 
-sbi_enable_service: yes
+sbi_enable_service: true
 sbi_startup_timeout_sec: 10
 
 sbi_java_version: 11
 sbi_java_flavour: "openjdk"
 sbi_java_extra_args: ""
 sbi_java_tmpdir: "{{ sbi_srv_dir }}"
-sbi_log_symlink: no
+sbi_log_symlink: false
 
 sbi_enable_dynlibs: false
 
-# dir permissions for "{{ sbi_appbase }}/run/" used to store the running transient files
+# dir permissions for "{{ sbi_appbase }}/run/"
+#   used to store the running transient files
 sbi_run_dir: "{{ sbi_appbase }}/run"
 sbi_run_dir_mode: "0750"
 
-# dir/files permissions for "{{ sbi_jar_location }}/" & "{{ sbi_jar_location }}/{{ sbi_appjarname }}"
-# ( of course, the user running the application must be able to read)
+# dir/files permissions for "{{ sbi_jar_location }}/"
+#   and "{{ sbi_jar_location }}/{{ sbi_appjarname }}"
+#   ( of course, the user running the application must be able to read)
 sbi_app_mode: "0750"
 
-# dir/files permissions for "{{ sbi_appbase_conf_location }}/" , "{{ sbi_appbase_conf_location }}//each_copied_conf-dir/" & "{{ sbi_appbase_conf_location }}//each_copied_conf-dir/each_copied_conf-file":
+# dir/files permissions for "{{ sbi_appbase_conf_location }}/" ,
+#   "{{ sbi_appbase_conf_location }}//each_conf-dir/"
+#   and "{{ sbi_appbase_conf_location }}//each_conf-dir/each_conf-file":
 sbi_conf_mode: "0750"
 
-# dir permissions and retention for "{{ sbi_log_dir }}/" used to store the running jar logs
+# dir permissions and retention for "{{ sbi_log_dir }}/"
+#    used to store the running jar logs
 sbi_log_dir_mode: "0750"
 sbi_log_dir_retention_days: 30
 
-# dir/files permissions for "{{ sbi_extra_files_dest }}/" && "{{ sbi_extra_files_dest }}/each_copied_extra_file"
+# dir/files permissions for "{{ sbi_extra_files_dest }}/"
+#   "{{ sbi_extra_files_dest }}/each_copied_extra_file"
 sbi_extra_files_mode: "0750"
 
-# dir/files permissions for "{{ sbi_keystores_dest }}/" && "{{ sbi_keystores_dest }}/each_copied_keystore_file"
+# dir/files permissions for "{{ sbi_keystores_dest }}/"
+#   "{{ sbi_keystores_dest }}/each_copied_keystore_file"
 sbi_keystores_mode: "0750"
 
 sbi_undeploy: false

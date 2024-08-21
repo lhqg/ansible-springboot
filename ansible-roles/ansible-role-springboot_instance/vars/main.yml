@@ -12,9 +12,13 @@ sbi_audit_keyword_write: ~
 sbi_log_dir_retention_days: ~
 
 sbi_folders:
-  - { name: "bin", path: "{{ sbi_appbase }}/bin", mode: "{{ sbi_bin_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_bin_t" }
-  - { name: "run", path: "{{ sbi_run_dir }}", mode: "{{ sbi_run_dir_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_run_t" }
-  - { name: "app", path: "{{ sbi_jar_location }}", mode: "{{ sbi_app_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_lib_t" }
-  - { name: "conf", path: "{{ sbi_appbase_conf_location }}", mode: "{{ sbi_conf_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_conf_t" }
-  - { name: "log", path: "{{ sbi_log_dir }}", mode: "{{ sbi_log_dir_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_log_t" }
-# ! The folders {{ sbi_extra_files_dest }} shouldn't be automatically created by using {{ sbi_folders }} since the default is the same with sbi_jar_location and might affect the rights of this folder !
+  - {name: "bin", path: "{{ sbi_appbase }}/bin", mode: "{{ sbi_bin_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_bin_t"}
+  - {name: "run", path: "{{ sbi_run_dir }}", mode: "{{ sbi_run_dir_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_run_t"}
+  - {name: "app", path: "{{ sbi_jar_location }}", mode: "{{ sbi_app_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_lib_t"}
+  - {name: "conf",
+     path: "{{ sbi_appbase_conf_location }}", mode: "{{ sbi_conf_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_conf_t"}
+  - {name: "log", path: "{{ sbi_log_dir }}", mode: "{{ sbi_log_dir_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_log_t"}
+
+# WARNING:
+#  The folders {{ sbi_extra_files_dest }} shouldn't be automatically created by using {{ sbi_folders }}
+#      since the default is the same with sbi_jar_location and might affect the rights of this folder !

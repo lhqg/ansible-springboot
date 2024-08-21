@@ -1,13 +1,13 @@
 ---
 - name: "Ensure Springboot application base directory sbi_appbase={{ sbi_appbase }} is removed"
-  file:
+  ansible.builtin.file:
     path: "{{ sbi_appbase }}/"
     state: absent
-    follow: no
+    follow: false
   become: "{{ sbi_become }}"
 
 - name: "Create {{ sbi_appname }} base directory sbi_appbase={{ sbi_appbase }}"
-  file:
+  ansible.builtin.file:
     path: "{{ sbi_appbase }}"
     state: directory
     mode: "{{ sbi_appbase_mode }}"
@@ -18,7 +18,7 @@
   become: "{{ sbi_become }}"
 
 - name: "Create {{ sbi_appname }} log directory sbi_log_dir={{ sbi_log_dir }}"
-  file:
+  ansible.builtin.file:
     path: "{{ sbi_log_dir }}"
     state: directory
     mode: "{{ sbi_log_dir_mode }}"
@@ -30,7 +30,7 @@
   become: "{{ sbi_become }}"
 
 - name: "Create {{ sbi_appname }} tmp/cache/work directory sbi_srv_dir={{ sbi_srv_dir }}"
-  file:
+  ansible.builtin.file:
     path: "{{ sbi_srv_dir }}"
     state: directory
     mode: "{{ sbi_log_dir_mode }}"
@@ -42,7 +42,7 @@
   become: "{{ sbi_become }}"
 
 - name: "Create {{ sbi_appname }} dynamic libraries directory {{ sbi_srv_dir }}/dynlib"
-  file:
+  ansible.builtin.file:
     path: "{{ sbi_srv_dir }}/dynlib"
     state: directory
     mode: "{{ sbi_log_dir_mode }}"
@@ -54,7 +54,7 @@
   become: "{{ sbi_become }}"
 
 - name: "Create application subdirectories with default/configured ownership & permissions (if each is different than sbi_appbase={{ sbi_appbase }})"
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     mode: "{{ item.mode }}"
@@ -68,21 +68,21 @@
   become: "{{ sbi_become }}"
 
 - name: "Create symlink of {{ sbi_log_dir }} to {{ sbi_appbase }}/logs block"
+  when: sbi_log_symlink
   block:
     - name: "Stat {{ sbi_appbase }}/logs"
-      stat:
+      ansible.builtin.stat:
         path: "{{ sbi_appbase }}/logs"
+      become: "{{ sbi_become }}"
       register: stat_dest_logs_dir
 
     - name: "Create logs symlink"
-      file:
+      ansible.builtin.file:
         src: "{{ sbi_log_dir }}"
         dest: "{{ sbi_appbase }}/logs"
         owner: "{{ sbi_log_dir_user }}"
         group: "{{ sbi_log_dir_group }}"
         state: link
         force: true
+      become: "{{ sbi_become }}"
       when: not stat_dest_logs_dir.stat.exists
-
-  become: "{{ sbi_become }}"
-  when: sbi_log_symlink

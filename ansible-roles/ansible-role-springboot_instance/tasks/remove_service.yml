@@ -4,13 +4,13 @@
 #   ansible.builtin.service:
 #     name: "{{ sbi_service_name }}"
 #     state: stopped
-#   become: "{{ sbi_become }}"    
+#   become: "{{ sbi_become }}"
 
 - name: Disable spring boot service
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ sbi_service_name }}"
     enabled: false
-    daemon_reload: yes
+    daemon_reload: true
   become: "{{ sbi_become }}"
 
 - name: Remove service env file
