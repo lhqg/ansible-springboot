@@ -1,0 +1,33 @@
+---
+
+- name : "Deploy audit rules for {{ sbi_appname }} READ critical filesystem objects"
+  template:
+    src: audit-rules_read.j2
+    dest: "/etc/audit/rules.d/010-{{ sbi_appname }}-read.rules"
+    owner: root
+    group: root
+    mode: 0400
+    seuser: system_u
+    serole: object_r
+    setype: auditd_etc_t
+  become: "{{ sbi_become }}"
+  when: sbi_audit_keyword_read is defined and sbi_audit_keyword_read|length > 0
+
+- name : "Deploy audit rules for {{ sbi_appname }} WRITE critical filesystem objects"
+  template:
+    src: audit-rules_write.j2
+    dest: "/etc/audit/rules.d/010-{{ sbi_appname }}-write.rules"
+    owner: root
+    group: root
+    mode: 0400
+    seuser: system_u
+    serole: object_r
+    setype: auditd_etc_t
+  become: "{{ sbi_become }}"
+  when: sbi_audit_keyword_write is defined and sbi_audit_keyword_write|length > 0
+
+- name : "Refresh Audit subsystem with new rules for {{ sbi_appname }}"
+  shell: >
+        /bin/bash -c "augenrules --load"
+  become: "{{ sbi_become }}"
+

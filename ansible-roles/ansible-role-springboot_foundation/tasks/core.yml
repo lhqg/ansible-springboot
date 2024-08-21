@@ -4,7 +4,7 @@
 
 - name: "Create LVs/FSes"
   include_tasks: lvm.yml
-  when: sb_dedicated_lv_opt or sb_dedicated_lv_srv or sb_dedicated_lv_log
+  when: sbf_dedicated_lv_opt or sbf_dedicated_lv_srv or sbf_dedicated_lv_log
 
 - name: "Deploy SELinux policy"
   include_tasks: selinux.yml

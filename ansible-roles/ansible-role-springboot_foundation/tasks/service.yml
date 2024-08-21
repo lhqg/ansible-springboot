@@ -4,10 +4,11 @@
   package:
     name: springboot-systemd
     state: present
-  become: "{{ sb_become }}"
+  become: "{{ sbf_become }}"
 
 - name: Enable the Install systemd Springboot target unit
   systemd:
     name: "springboot.target"
-    enabled: sb_systemd_target_enabled
+    enabled: sbf_systemd_target_enabled
     daemon_reload: yes
+  become: "{{ sbf_become }}"

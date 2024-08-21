@@ -15,6 +15,9 @@ galaxy_info:
     - "35"
     - "36"
     - "37"
+    - "38"
+    - "39"
+    - "40"
   galaxy_tags:
     - springboot
 dependencies: []

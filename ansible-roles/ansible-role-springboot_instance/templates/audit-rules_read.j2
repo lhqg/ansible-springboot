@@ -1,0 +1,8 @@
+#
+## Audit rules for {{ sbi_appname }} READ critical filesystem objects
+#
+
+-a always,exit -F dir=/opt/{{ sb_appname }}/lib/  -F perm=r  -F subj_type!=springboot_t -F subj_type!=sysadm_t -k {{ sbi_audit_keyword_read }}
+-a always,exit -F dir=/opt/{{ sb_appname }}/conf/ -F perm=r  -F subj_type!=springboot_t -F subj_type!=sysadm_t -k {{ sbi_audit_keyword_read }}
+-a always,exit -F path=/opt/{{ sb_appname }}/env  -F perm=r  -F subj_type!=springboot_t -F subj_type!=sysadm_t -k {{ sbi_audit_keyword_read }}
+-a always,exit -F path=/opt/bin/springboot_service -F perm=r   -F subj_type!=initrc_domain -F subj_type!=sysadm_t -k {{ sbi_audit_keyword_read }}

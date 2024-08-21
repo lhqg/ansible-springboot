@@ -1,0 +1,14 @@
+---
+- name: "Install cron file to purge logs of Springboot {{ sbi_appname }} instance"
+  template:
+    src: springboot_purge-log_cronjob.j2
+    dest: "/etc/cron.d/springboot_{{ sbi_appname }}_jobs.cron"
+    owner: root
+    group: root
+    mode: 0400
+    seuser: system_u
+    serole: object_r
+    setype: system_cron_spool_t
+  become: "{{ sbi_become }}"
+  when: sbi_log_dir_retention_days is defined and sbi_log_dir_retention_days|int > 0
+

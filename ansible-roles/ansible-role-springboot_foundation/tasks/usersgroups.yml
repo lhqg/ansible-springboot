@@ -3,13 +3,14 @@
   ansible.builtin.group:
     name: springboot
     state: present
-    gid: {{ sb_group_id }}
-  become: "{{ sb_become }}"
+    gid: {{ sbf_group_id }}
+  become: "{{ sbf_become }}"
 
 - name: Ensure user "springboot" exists with correct UID/GID
   ansible.builtin.user:
     name: springboot
-    uid: {{ sb_user_id }}
+    uid: {{ sbf_user_id }}
     group: springboot
     shell: /sbin/nologin
     password: '!'
+  become: "{{ sbf_become }}"

@@ -3,18 +3,18 @@
 - name: "Install Springboot service environment file"
   template:
     src: service-env.j2
-    dest: "{{ sb_service_env_filename }}"
+    dest: "{{ sbi_service_env_filename }}"
     owner: springboot
     group: springboot
     mode: 0400
     seuser: system_u
     serole: object_r
     setype: springboot_conf_t
-  become: "{{ sb_become }}"
+  become: "{{ sbi_become }}"
 
 - name: "Create overrides directory for Springboot service instance"
   file:
-    path: "/etc/systemd/system/springboot@{{ sb_appname }}.d"
+    path: "/etc/systemd/system/springboot@{{ sbi_appname }}.d"
     state: directory
     owner: root
     group: root
@@ -22,11 +22,11 @@
     seuser: system_u
     serole: object_r
     setype: springboot_unit_file_t
-  become: "{{ sb_become }}"
+  become: "{{ sbi_become }}"
 
-- name: "Make {{ sb_appname }} start at boot and reload daemon"
+- name: "Make {{ sbi_appname }} start at boot and reload daemon"
   systemd:
-    name: "{{ sb_service_name }}"
-    enabled: "{{ sb_start_at_boot }}"
+    name: "{{ sbi_service_name }}"
+    enabled: "{{ sbi_start_at_boot }}"
     daemon_reload: yes
-  become: "{{ sb_become }}"
+  become: "{{ sbi_become }}"
