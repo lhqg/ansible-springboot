@@ -1,7 +1,8 @@
 ---
 - name: "Restore SELinux fcontexts for {{ sbi_appname }}"
   ansible.builtin.shell: >
-        /bin/bash -c "/sbin/restorecon -RFi {{ sbi_appbase }} {{ sbi_log_dir }} {{ sbi_srv_dir }}"
+    /bin/bash -c "/sbin/restorecon -RFi {{ sbi_appbase }} {{ sbi_log_dir }} {{ sbi_srv_dir }}"
+  changed_when: true
   become: "{{ sbi_become }}"
 
 - name: "Add SELinux type to listen port {{ sbi_listen_port }}"

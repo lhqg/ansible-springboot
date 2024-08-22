@@ -23,7 +23,7 @@
   register: sbi_find_conf_files
   delegate_to: localhost
 
-- name: "Create the conf subdirectories in {{ sbi_appbase_conf_location }}/"
+- name: "Create the conf subdirectories in {{ sbi_appbase_conf_location }}"
   ansible.builtin.file:
     path: "{{ item.path | regex_replace(sbi_conf_src | regex_escape(), sbi_appbase_conf_location) }}"
     state: directory
@@ -37,7 +37,7 @@
   when: item.isdir
   become: "{{ sbi_become }}"
 
-- name: "Copy Springboot conf files in {{ sbi_appbase_conf_location }}/"
+- name: "Copy Springboot conf files in {{ sbi_appbase_conf_location }}"
   ansible.builtin.template:
     src: "{{ item.path }}"
     dest: "{{ item.path | regex_replace(sbi_conf_src | regex_escape(), sbi_appbase_conf_location) }}"
@@ -87,7 +87,7 @@
         serole: object_r
       when: sbi_extra_files_dest != sbi_appbase and sbi_extra_files_dest != sbi_appbase_conf_location and sbi_extra_files_dest != sbi_jar_location
       become: "{{ sbi_become }}"
-    - name: "Copy other/extra files needed by the application from {{ sbi_extra_files_src }}/ to {{ sbi_extra_files_dest }}/"
+    - name: "Copy other/extra files needed by the application from {{ sbi_extra_files_dest }}"
       ansible.builtin.copy:
         src: "{{ sbi_extra_files_src }}/"
         dest: "{{ sbi_extra_files_dest }}/"
@@ -103,40 +103,41 @@
     - sbi_keystores_src is defined and sbi_keystores_src|length > 0
     - sbi_keystores_dest is defined and sbi_keystores_dest|length >0
   block:
-   - name: "Create subdir sbi_keystores_dest={{ sbi_keystores_dest }}"
-   # (in case is different than sbi_appbase,
-   #   sbi_appbase_conf_location=,
-   #   sbi_extra_files_dest,
-   #   and sbi_jar_location)
-     ansible.builtin.file:
-       path: "{{ sbi_keystores_dest }}"
-       state: directory
-       owner: springboot
-       group: springboot
-       mode: "{{ sbi_keystores_mode }}"
-       seuser: system_u
-       serole: object_r
-       setype: springboot_auth_t
-     become: "{{ sbi_become }}"
-     when:
-       - sbi_keystores_dest != sbi_appbase
-       - sbi_keystores_dest != sbi_appbase_conf_location
-       - sbi_keystores_dest != sbi_extra_files_dest
-       - sbi_keystores_dest != sbi_jar_location
+    - name: "Create subdir sbi_keystores_dest={{ sbi_keystores_dest }}"
+    # (in case is different than sbi_appbase,
+    #   sbi_appbase_conf_location=,
+    #   sbi_extra_files_dest,
+    #   and sbi_jar_location)
+      ansible.builtin.file:
+        path: "{{ sbi_keystores_dest }}"
+        state: directory
+        owner: springboot
+        group: springboot
+        mode: "{{ sbi_keystores_mode }}"
+        seuser: system_u
+        serole: object_r
+        setype: springboot_auth_t
+      become: "{{ sbi_become }}"
+      when:
+        - sbi_keystores_dest != sbi_appbase
+        - sbi_keystores_dest != sbi_appbase_conf_location
+        - sbi_keystores_dest != sbi_extra_files_dest
+        - sbi_keystores_dest != sbi_jar_location
 
-   - name: "Copy keystores & certificates from {{ sbi_keystores_src }}/ to {{ sbi_keystores_dest }}/"
-     ansible.builtin.copy:
-       src: "{{ sbi_keystores_src }}/"
-       dest: "{{ sbi_keystores_dest }}/"
-       owner: springboot
-       group: springboot
-       mode: "{{ sbi_keystores_mode }}"
-       seuser: system_u
-       serole: object_r
-       setype: springboot_auth_t
-     become: "{{ sbi_become }}"
- 
+    - name: "Copy keystores & certificates from {{ sbi_keystores_dest }}"
+      ansible.builtin.copy:
+        src: "{{ sbi_keystores_src }}/"
+        dest: "{{ sbi_keystores_dest }}/"
+        owner: springboot
+        group: springboot
+        mode: "{{ sbi_keystores_mode }}"
+        seuser: system_u
+        serole: object_r
+        setype: springboot_auth_t
+      become: "{{ sbi_become }}"
+
 - name: "Restore SELinux file contexts for Springboot instance"
   ansible.builtin.shell: >
     bash -c "/sbin/restorecon -RFi {{ sbi_appbase }} {{ sbi_log_dir }} {{ sbi_srv_dir }}"
+  changed_when: true
   become: "{{ sbi_become }}"

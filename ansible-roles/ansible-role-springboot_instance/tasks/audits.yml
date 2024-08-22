@@ -1,5 +1,5 @@
 ---
-- name: "Deploy audit rules for {{ sbi_appname }} READ critical filesystem objects"
+- name: "Deploy audit rules for READ critical filesystem objects of {{ sbi_appname }}"
   ansible.builtin.template:
     src: audit-rules_read.j2
     dest: "/etc/audit/rules.d/010-{{ sbi_appname }}-read.rules"
@@ -12,7 +12,7 @@
   become: "{{ sbi_become }}"
   when: sbi_audit_keyword_read is defined and sbi_audit_keyword_read|length > 0
 
-- name: "Deploy audit rules for {{ sbi_appname }} WRITE critical filesystem objects"
+- name: "Deploy audit rules for WRITE critical filesystem objects of {{ sbi_appname }}"
   ansible.builtin.template:
     src: audit-rules_write.j2
     dest: "/etc/audit/rules.d/010-{{ sbi_appname }}-write.rules"
@@ -27,5 +27,6 @@
 
 - name: "Refresh Audit subsystem with new rules for {{ sbi_appname }}"
   ansible.builtin.shell: >
-        /bin/bash -c "augenrules --load"
+    /bin/bash -c "augenrules --load"
+  changed_when: true
   become: "{{ sbi_become }}"

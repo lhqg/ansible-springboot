@@ -6,25 +6,25 @@
     dest: "{{ sbi_service_env_filename }}"
     owner: springboot
     group: springboot
-    mode: 0400
+    mode: "0400"
     seuser: system_u
     serole: object_r
     setype: springboot_conf_t
   become: "{{ sbi_become }}"
 
-- name: "Create overrides directory for Springboot service instance"
+- name: "Create overrides directory for Springboot service instance for {{ sbi_appname }}"
   ansible.builtin.file:
     path: "/etc/systemd/system/springboot@{{ sbi_appname }}.d"
     state: directory
     owner: root
     group: root
-    mode: 0555
+    mode: "0555"
     seuser: system_u
     serole: object_r
     setype: springboot_unit_file_t
   become: "{{ sbi_become }}"
 
-- name: "Make {{ sbi_appname }} start at boot and reload daemon"
+- name: "Start and enable boot-time start for {{ sbi_appname }}"
   ansible.builtin.systemd:
     name: "{{ sbi_service_name }}"
     enabled: "{{ sbi_start_at_boot }}"

@@ -27,7 +27,7 @@
         state: absent
         path: "{{ sbi_extra_files_dest }}/{{ item }}"
 
-      loop: "{{ found_extra_files.files | map(attribute='path') | regex_replace(sbi_extra_files_src|regex_escape() +'/', '') }}"
+      loop: "{{ found_extra_files.files | map(attribute='path') | regex_replace(sbi_extra_files_src | regex_escape() + '/', '') }}"
       when: sbi_extra_files_src is defined and sbi_remove_extra_files
       become: "{{ sbi_become }}"
 

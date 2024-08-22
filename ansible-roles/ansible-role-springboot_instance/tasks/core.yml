@@ -21,11 +21,11 @@
     - ansible_distribution_major_version|int >= 7
     - sbi_become
 
-- name: "Deploy application {{ sbi_appname }} files"
+- name: "Deploy application files for {{ sbi_appname }}"
   ansible.builtin.include_tasks: app_deploy.yml
 
 - name: "Audit rules for {{ sbi_appname }}"
   ansible.builtin.include_tasks: audits.yml
 
-- name: "Cron to purge {{ sbi_appname }} logs"
+- name: "Cron to purge og files of {{ sbi_appname }}"
   ansible.builtin.include_tasks: cron.yml

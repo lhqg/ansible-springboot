@@ -1,5 +1,5 @@
 ---
-- name: "Install cron file to purge logs of Springboot {{ sbi_appname }} instance"
+- name: "Install cron file to purge logs of Springboot {{ sbi_appname }}"
   ansible.builtin.template:
     src: springboot_purge-log_cronjob.j2
     dest: "/etc/cron.d/springboot_{{ sbi_appname }}_jobs.cron"
