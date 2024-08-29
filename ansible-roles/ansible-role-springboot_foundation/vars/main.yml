@@ -1,11 +1,11 @@
 ---
 # Variables for ansible-role-springboot_foundation
 
-sb_dedicated_lv_opt: yes
-sb_dedicated_vg_opt: ~
+sbf_dedicated_lv_opt: true
+sbf_dedicated_vg_opt: ~
 
-sb_dedicated_lv_srv: yes
-sb_dedicated_vg_srv: ~
+sbf_dedicated_lv_srv: true
+sbf_dedicated_vg_srv: ~
 
-sb_dedicated_lv_log: yes
-sb_dedicated_vg_log: ~
+sbf_dedicated_lv_log: true
+sbf_dedicated_vg_log: ~

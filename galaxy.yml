@@ -1,0 +1,17 @@
+---
+namespace: "lhqg"
+name: "springboot"
+version: "1.0.0"
+readme: "README.md"
+authors:
+  - "Hubert Quarantel-Colombani <hubert.quarantel@lhqg.fr>"
+  - "Laurent Gaillard <laurent.gaillard@lhqg.fr>"
+license:
+  - "GPL-3.0-or-later"
+description: "Ansible roles to install and deploy Springboot application as Linux services"
+tags:
+  - linux
+  - application
+repository: "https://github.com/lhqg/ansible-springboot"
+dependencies:
+  "community.general": ">=1.0.0"

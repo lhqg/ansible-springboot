@@ -1,0 +1,88 @@
+---
+- name: "Cleanup Springboot application base directory {{ sbi_appbase }}"
+  ansible.builtin.file:
+    path: "{{ sbi_appbase }}/"
+    state: absent
+    follow: false
+  become: "{{ sbi_become }}"
+
+- name: "Create base directory sbi_appbase={{ sbi_appbase }}"
+  ansible.builtin.file:
+    path: "{{ sbi_appbase }}"
+    state: directory
+    mode: "{{ sbi_appbase_mode }}"
+    owner: springboot
+    group: springboot
+    seuser: system_u
+    serole: object_r
+  become: "{{ sbi_become }}"
+
+- name: "Create log directory sbi_log_dir={{ sbi_log_dir }}"
+  ansible.builtin.file:
+    path: "{{ sbi_log_dir }}"
+    state: directory
+    mode: "{{ sbi_log_dir_mode }}"
+    owner: springboot
+    group: springboot
+    seuser: system_u
+    serole: object_r
+    setype: springboot_log_t
+  become: "{{ sbi_become }}"
+
+- name: "Create tmp/cache/work directory sbi_srv_dir={{ sbi_srv_dir }}"
+  ansible.builtin.file:
+    path: "{{ sbi_srv_dir }}"
+    state: directory
+    mode: "{{ sbi_log_dir_mode }}"
+    owner: springboot
+    group: springboot
+    seuser: system_u
+    serole: object_r
+    setype: springboot_var_t
+  become: "{{ sbi_become }}"
+
+- name: "Create dynamic libraries subdirectory dynlib in {{ sbi_srv_dir }}"
+  ansible.builtin.file:
+    path: "{{ sbi_srv_dir }}/dynlib"
+    state: directory
+    mode: "{{ sbi_log_dir_mode }}"
+    owner: springboot
+    group: springboot"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_dynlib_t
+  become: "{{ sbi_become }}"
+
+- name: "Create application subdirectories with default/configured ownership & permissions in {{ sbi_appbase }}"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    mode: "{{ item.mode }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    seuser: system_u
+    serole: object_r
+    setype: "{{ item.seltype }}"
+  loop: "{{ sbi_folders }}"
+  when: item.path != sbi_appbase
+  become: "{{ sbi_become }}"
+
+- name: "Create symlink logs in {{ sbi_appbase }}"
+  when: sbi_log_symlink
+  block:
+    - name: "Stat logs in {{ sbi_appbase }}"
+      ansible.builtin.stat:
+        path: "{{ sbi_appbase }}/logs"
+      become: "{{ sbi_become }}"
+      register: stat_dest_logs_dir
+
+    - name: "Create logs symlink"
+      ansible.builtin.file:
+        src: "{{ sbi_log_dir }}"
+        dest: "{{ sbi_appbase }}/logs"
+        owner: "{{ sbi_log_dir_user }}"
+        group: "{{ sbi_log_dir_group }}"
+        state: link
+        force: true
+      become: "{{ sbi_become }}"
+      when: not stat_dest_logs_dir.stat.exists

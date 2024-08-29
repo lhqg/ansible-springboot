@@ -1,0 +1,3 @@
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+00 */8 * * * root find {{ sbi_log_dir }}/ -type f -mtime +{{ sbi_log_dir_retention_days }} -print0 | xargs -n 200 --no-run-if-empty -0 rm -f 2>&1 | logger -p daemon.warn -t SPRINGBOOT_LOGPURGE

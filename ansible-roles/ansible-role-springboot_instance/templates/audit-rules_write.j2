@@ -1,0 +1,9 @@
+#
+## Audit rules for {{ sbi_appname }} WRITE critical filesystem objects
+#
+
+-a always,exit -F dir=/opt/{{ sb_appname }}/conf/ -F perm=wa -F auid!={{ ansible_user }} -k {{ sbi_audit_keyword_write }}
+-a always,exit -F dir=/opt/{{ sb_appname }}/lib/  -F perm=wa -F auid!={{ ansible_user }} -k {{ sbi_audit_keyword_xrite }}
+-a always,exit -F path=/opt/{{ sb_appname }}/env  -F perm=wa -F auid!={{ ansible_user }} -k {{ sbi_audit_keyword_write }}
+-a always,exit -F path=/opt/bin/springboot_service -F perm=wa  -F auid!={{ ansible_user }} -k {{ sbi_audit_keyword_write }}
+-A always,exit -F dir=/etc/systemd/system/springboot@{{ sbi_appname }}.d/ -F perm=wa -F auid!={{ ansible_user }} -k {{ sbi_audit_keyword_write }}

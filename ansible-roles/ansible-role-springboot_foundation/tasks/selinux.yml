@@ -1,13 +1,13 @@
 ---
 
 - name: Ensure the springboot-selinux RPM is present
-  package:
+  ansible.builtin.package:
     name: springboot-selinux
     state: present
-  become: "{{ sb_become }}"
+  become: "{{ sbf_become }}"
 
 - name: Ensure the springboot-selinux-devel RPM is present
-  package:
+  ansible.builtin.package:
     name: springboot-selinux-devel
     state: present
-  become: "{{ sb_become }}"
+  become: "{{ sbf_become }}"

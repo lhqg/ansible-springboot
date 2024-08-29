@@ -1,44 +1,44 @@
 ---
 
-- name: "Attempt to stop server"
-  include_tasks: stop_server.yml
+- name: "Attempt to stop instance"
+  ansible.builtin.include_tasks: stop_instance.yml
 
 - name: "Remove Springboot service"
-  include_tasks: remove_service.yml
+  ansible.builtin.include_tasks: remove_service.yml
 
 - name: Remove files (only on RHEL7 and higher)
   block:
     - name: Find extra files
-      find:
-        paths: "{{ sb_extra_files_src }}"
-      when: sb_extra_files_src is defined and sb_remove_extra_files
+      ansible.builtin.find:
+        paths: "{{ sbi_extra_files_src }}"
+      when: sbi_extra_files_src is defined and sbi_remove_extra_files
       register: found_extra_files
       delegate_to: localhost
 
     - name: Find keystores
-      find:
-        paths: "{{ sb_keystores_src }}"
-      when: sb_keystores_src is defined and sb_remove_keystores
+      ansible.builtin.find:
+        paths: "{{ sbi_keystores_src }}"
+      when: sbi_keystores_src is defined and sbi_remove_keystores
       register: found_keystores
       delegate_to: localhost
 
     - name: Remove extra files
-      file:
+      ansible.builtin.file:
         state: absent
-        path: "{{ sb_extra_files_dest }}/{{ item }}"
+        path: "{{ sbi_extra_files_dest }}/{{ item }}"
 
-      loop: "{{ found_extra_files.files | map(attribute='path') | regex_replace(sb_extra_files_src|regex_escape() +'/', '') }}"
-      when: sb_extra_files_src is defined and sb_remove_extra_files
-      become: "{{sb_become}}"
+      loop: "{{ found_extra_files.files | map(attribute='path') | regex_replace(sbi_extra_files_src | regex_escape() + '/', '') }}"
+      when: sbi_extra_files_src is defined and sbi_remove_extra_files
+      become: "{{ sbi_become }}"
 
     - name: Remove main application folder /opt
-      file:
+      ansible.builtin.file:
         state: absent
-        path: "{{ sb_appbase }}"
-      become: "{{sb_become}}"
+        path: "{{ sbi_appbase }}"
+      become: "{{ sbi_become }}"
 
     - name: Remove main application folder /srv
-      file:
+      ansible.builtin.file:
         state: absent
-        path: "{{ sb_srv_dir }}"
-      become: "{{sb_become}}"
+        path: "{{ sbi_srv_dir }}"
+      become: "{{ sbi_become }}"

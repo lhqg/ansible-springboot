@@ -38,19 +38,19 @@ It ensures the SELinux and systemd packages for Springboot are installed.
 
 ### Role variables
 
-`sb_user_id`: UID (default: 5000) for the `springboot` user which will run the Springboot process(es).
-`sb_group_id`: GID (default: 5000) for the `springboot` group.
+`sbf_user_id`: UID (default: 5000) for the `springboot` user which will run the Springboot process(es).
+`sbf_group_id`: GID (default: 5000) for the `springboot` group.
 
-`sb_dedicated_lv_opt`: (_yes_|no) Whether the /opt/springboot directory tree should be created as a dedicated filesystem and logical volume,
-`sb_dedicated_vg_opt`: Name of the volume group to host the /opt/springboot filesystem.
+`sbf_dedicated_lv_opt`: (_yes_|no) Whether the /opt/springboot directory tree should be created as a dedicated filesystem and logical volume,
+`sbf_dedicated_vg_opt`: Name of the volume group to host the /opt/springboot filesystem.
 
-`sb_dedicated_lv_srv`: (_yes_|no) Whether the /srv/springboot directory tree should be created as a dedicated filesystem and logical volume,
-`sb_dedicated_vg_srv`: Name of the volume group to host the /srv/springboot filesystem.
+`sbf_dedicated_lv_srv`: (_yes_|no) Whether the /srv/springboot directory tree should be created as a dedicated filesystem and logical volume,
+`sbf_dedicated_vg_srv`: Name of the volume group to host the /srv/springboot filesystem.
 
-`sb_dedicated_lv_log`: (_yes_|no) Whether the /var/log/springboot directory tree should be created as a dedicated filesystem and logical volume,
-`sb_dedicated_vg_log`: Name of the volume group to host the /var/log/springboot filesystem.
+`sbf_dedicated_lv_log`: (_yes_|no) Whether the /var/log/springboot directory tree should be created as a dedicated filesystem and logical volume,
+`sbf_dedicated_vg_log`: Name of the volume group to host the /var/log/springboot filesystem.
 
-`sb_systemd_target_enabled`: (_yes_|no) Whether the `springboot.target` systemd unit should be enabled so that all Springboot applications are started at boot ime.
+`sbf_systemd_target_enabled`: (_yes_|no) Whether the `springboot.target` systemd unit should be enabled so that all Springboot applications are started at boot ime.
 
 ## springboot_instance role
 
