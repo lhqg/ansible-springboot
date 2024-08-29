@@ -1,13 +1,13 @@
-How to Submit Patches to the Puppet module `hubertqc-springboot`
+How to Submit Patches to the Ansible collection `lhqg.springboot`
 ================================================================
-https://github.com/hubertqc/puppet-springboot
+https://github.com/lhqg/ansible-springboot
 
 This document is intended to act as a guide to help you contribute to the
-`springboot` Puppet module project.
+`springboot` Ansible collection project.
 
 ## Test Your Code
 
-The Puppet Development Kit (PDK) MUST validate your code without error.
+The Ansible linter MUST validate your code without error.
 
 Please, try your best not to break anything, and if you break something, make
 sure you have a good reason, and make sure you tell us about it when you post
