@@ -64,7 +64,7 @@ Via `requirements.yml`:
 ---
 
 - name: ansible-role-springboot_foundation
-  src: https://github.com/hubertqc/selinux_springboot/
+  src: https://github.com/lhqg/ansible-springboot/
   scm: git
   version: a tag of the role
 

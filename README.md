@@ -1,10 +1,10 @@
-![GitHub Release (latest SemVer)](https://img.shields.io/github/v/release/hubertqc/ansible-springboot)
+![GitHub Release (latest SemVer)](https://img.shields.io/github/v/release/lhqg/ansible-springboot)
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![GitHub Issues](https://img.shields.io/github/issues/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/issues)
-[![GitHub PR](https://img.shields.io/github/issues-pr/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/pulls)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/commits/main)
-[![GitHub Last commit](https://img.shields.io/github/last-commit/hubertqc/ansible-springboot)](https://github.com/hubertqc/ansible-springboot/commits/main)
-![GitHub Downloads](https://img.shields.io/github/downloads/hubertqc/ansible-springboot/total)
+[![GitHub Issues](https://img.shields.io/github/issues/lhqg/ansible-springboot)](https://github.com/lhqg/ansible-springboot/issues)
+[![GitHub PR](https://img.shields.io/github/issues-pr/lhqg/ansible-springboot)](https://github.com/lhqg/ansible-springboot/pulls)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/lhqg/ansible-springboot)](https://github.com/lhqg/ansible-springboot/commits/main)
+[![GitHub Last commit](https://img.shields.io/github/last-commit/lhqg/ansible-springboot)](https://github.com/lhqg/ansible-springboot/commits/main)
+![GitHub Downloads](https://img.shields.io/github/downloads/lhqg/ansible-springboot/total)
 
 # Ansible roles to deploy Springboot applications on Linux
 
@@ -64,7 +64,7 @@ Works only on Red Hat Linux and Red Hat like distributions.
 
 ## Development
 
-See https://github.com/hubertqc/ansible-springboot/CONTRIBUTING.md
+See https://github.com/lhqg/ansible-springboot/CONTRIBUTING.md
 
 ## Disclaimer
 
