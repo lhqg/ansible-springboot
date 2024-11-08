@@ -8,6 +8,8 @@
 
 # Ansible roles to deploy Springboot applications on Linux
 
+Maintained and provided as a community contribution by [LHQG](https://www.lhqg.fr/).
+
 ## Table of Contents
 
 1. [Overview](#overview)
