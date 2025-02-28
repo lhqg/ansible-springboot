@@ -7,3 +7,5 @@ sbf_user_id: 5000
 sbf_group_id: 5000
 
 sbf_systemd_target_enabled: true
+
+sbf_default_fs_size_g: 1

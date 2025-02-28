@@ -9,3 +9,5 @@ sbf_dedicated_vg_srv: ~
 
 sbf_dedicated_lv_log: true
 sbf_dedicated_vg_log: ~
+
+sbf_fstype: "xfs"

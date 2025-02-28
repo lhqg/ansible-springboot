@@ -9,6 +9,7 @@
     seuser: system_u
     serole: object_r
     setype: usr_t
+    selevel: s0
   become: "{{ sbf_become }}"
 
 - name: Create Springboot LOGs root
@@ -21,6 +22,7 @@
     seuser: system_u
     serole: object_r
     setype: springboot_log_t
+    selevel: s0
   become: "{{ sbf_become }}"
 
 - name: Create Springboot TMP/cache/work root
@@ -33,6 +35,7 @@
     seuser: system_u
     serole: object_r
     setype: springboot_var_t
+    selevel: s0
   become: "{{ sbf_become }}"
 
 - name: Create Springboot APPs common bin directory
@@ -45,6 +48,7 @@
     seuser: system_u
     serole: object_r
     setype: springboot_bin_t
+    selevel: s0
   become: "{{ sbf_become }}"
 
 - name: "Restore SELinux fcontexts for Springboot roots"

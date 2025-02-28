@@ -4,14 +4,14 @@
   community.general.lvol:
     vg: "{{ sbf_dedicated_vg_opt }}"
     lv: lv_opt_springboot
-    size: 1g
+    size: "{{ sbf_default_fs_size_g }}g"
     state: present
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_opt
 
 - name: "Initialise the XFS filesystem for /opt/springboot"
   community.general.filesystem:
-    fstype: xfs
+    fstype: "{{ sbf_fstype }}"
     dev: "/dev/{{ sbf_dedicated_vg_opt }}/lv_opt_springboot"
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_opt
@@ -20,7 +20,7 @@
   community.general.mount:
     path: /opt/springboot
     src: "/dev/{{ sbf_dedicated_vg_opt }}/lv_opt_springboot"
-    fstype: xfs
+    fstype: "{{ sbf_fstype }}"
     state: mounted
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_opt
@@ -29,14 +29,14 @@
   community.general.lvol:
     vg: "{{ sbf_dedicated_vg_srv }}"
     lv: lv_srv_springboot
-    size: 1g
+    size: "{{ sbf_default_fs_size_g }}g"
     state: present
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_srv
 
 - name: "Initialise the XFS filesystem for /srv/springboot"
   community.general.filesystem:
-    fstype: xfs
+    fstype: "{{ sbf_fstype }}"
     dev: "/dev/{{ sbf_dedicated_vg_srv }}/lv_srv_springboot"
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_srv
@@ -45,7 +45,7 @@
   community.general.mount:
     path: /srv/springboot
     src: "/dev/{{ sbf_dedicated_vg_srv }}/lv_srv_springboot"
-    fstype: xfs
+    fstype: "{{ sbf_fstype }}"
     state: mounted
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_srv
@@ -54,14 +54,14 @@
   community.general.lvol:
     vg: "{{ sbf_dedicated_vg_log }}"
     lv: lv_log_springboot
-    size: 1g
+    size: "{{ sbf_default_fs_size_g }}g"
     state: present
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_log
 
 - name: "Initialise the XFS filesystem for /var/log/springboot"
   community.general.filesystem:
-    fstype: xfs
+    fstype: "{{ sbf_fstype }}"
     dev: "/dev/{{ sbf_dedicated_vg_log }}/lv_log_springboot"
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_log
@@ -70,7 +70,7 @@
   community.general.mount:
     path: /var/log/springboot
     src: "/dev/{{ sbf_dedicated_vg_log }}/lv_log_springboot"
-    fstype: xfs
+    fstype: "{{ sbf_fstype }}"
     state: mounted
   become: "{{ sbf_become }}"
   when: sbf_dedicated_lv_log
