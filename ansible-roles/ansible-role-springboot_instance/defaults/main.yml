@@ -4,21 +4,11 @@
 sbi_become: true
 
 sbi_workdir: /var/tmp/springboot
-sbi_appbase: "/opt/springboot/{{ sbi_appname }}"
-
-sbi_service_env_filename: "/opt/springboot/{{ sbi_appname }}/env"
-
-sbi_jar_location: "{{ sbi_appbase }}/lib"
 sbi_conf_src: "{{ playbook_dir }}/files/conf"
-sbi_appbase_conf_location: "{{ sbi_appbase }}/conf"
-sbi_java_security_file: "{{ sbi_appbase_conf_location }}/java.security"
-sbi_keystores_dest: "{{ sbi_appbase }}/keys"
-sbi_log_dir: "/var/log/springboot/{{ sbi_appname }}"
-sbi_srv_dir: "/srv/springboot/{{ sbi_appname }}"
+
 sbi_run_handlers: true
 sbi_cleanup_entire_workdir: false
 sbi_extra_files_dest: "{{ sbi_jar_location }}"
-sbi_appbase_mode: "0750"
 
 sbi_listen_port: 8443
 sbi_monitoring_port: ~
@@ -41,34 +31,22 @@ sbi_log_symlink: false
 
 sbi_enable_dynlibs: false
 
-# dir permissions for "{{ sbi_appbase }}/run/"
-#   used to store the running transient files
-sbi_run_dir: "{{ sbi_appbase }}/run"
-sbi_run_dir_mode: "0750"
+# keywords for audit rules
+sbi_audit_keyword_read: ~
+sbi_audit_keyword_write: ~
+sbi_audit_rules_ordering: "010"
 
-# dir/files permissions for "{{ sbi_jar_location }}/"
-#   and "{{ sbi_jar_location }}/{{ sbi_appjarname }}"
-#   ( of course, the user running the application must be able to read)
-sbi_app_mode: "0750"
-
-# dir/files permissions for "{{ sbi_appbase_conf_location }}/" ,
-#   "{{ sbi_appbase_conf_location }}//each_conf-dir/"
-#   and "{{ sbi_appbase_conf_location }}//each_conf-dir/each_conf-file":
-sbi_conf_mode: "0750"
-
-# dir permissions and retention for "{{ sbi_log_dir }}/"
-#    used to store the running jar logs
-sbi_log_dir_mode: "0750"
+# Springboot instance log file retention (days)
 sbi_log_dir_retention_days: 30
 
 # dir/files permissions for "{{ sbi_extra_files_dest }}/"
 #   "{{ sbi_extra_files_dest }}/each_copied_extra_file"
 sbi_extra_files_mode: "0750"
 
-# dir/files permissions for "{{ sbi_keystores_dest }}/"
-#   "{{ sbi_keystores_dest }}/each_copied_keystore_file"
-sbi_keystores_mode: "0750"
+# Various defaults
 
+# Default is to deploy, not to undeploy
 sbi_undeploy: false
+
 sbi_remove_extra_files: false
 sbi_remove_keystores: false

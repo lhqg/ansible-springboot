@@ -1,5 +1,5 @@
 ---
-# vars file for springboot
+# vars file for springboot instance
 
 # systemd service unit name
 sbi_service_name: "springboot@{{ sbi_appname }}"
@@ -8,9 +8,42 @@ sbi_service_name: "springboot@{{ sbi_appname }}"
 sbi_audit_keyword_read: ~
 sbi_audit_keyword_write: ~
 
-# Springboot instance log file retention (days)
-sbi_log_dir_retention_days: ~
+# Directories where the Spring Boot app is deployed, and where it works
+sbi_appbase: "/opt/springboot/{{ sbi_appname }}"
+sbi_appbase_mode: "0750"
 
+sbi_service_env_filename: "/opt/springboot/{{ sbi_appname }}/env"
+sbi_jar_location: "{{ sbi_appbase }}/lib"
+sbi_appbase_conf_location: "{{ sbi_appbase }}/conf"
+sbi_java_security_file: "{{ sbi_appbase_conf_location }}/java.security"
+sbi_keystores_dest: "{{ sbi_appbase }}/keys"
+sbi_log_dir: "/var/log/springboot/{{ sbi_appname }}"
+sbi_srv_dir: "/srv/springboot/{{ sbi_appname }}"
+
+# Dir permissions for "{{ sbi_appbase }}/run/"
+#   used to store the running transient files
+sbi_run_dir: "{{ sbi_appbase }}/run"
+sbi_run_dir_mode: "0750"
+
+# Dir/files permissions for "{{ sbi_jar_location }}/"
+#   and "{{ sbi_jar_location }}/{{ sbi_appjarname }}"
+#   ( of course, the user running the application must be able to read)
+sbi_app_mode: "0750"
+
+# Dir/files permissions for "{{ sbi_appbase_conf_location }}/" ,
+#   "{{ sbi_appbase_conf_location }}//each_conf-dir/"
+#   and "{{ sbi_appbase_conf_location }}//each_conf-dir/each_conf-file":
+sbi_conf_mode: "0750"
+
+# Dir permissions "{{ sbi_log_dir }}/"
+#    used to store the running jar logs
+sbi_log_dir_mode: "0750"
+
+# Dir/files permissions for "{{ sbi_keystores_dest }}/"
+#   "{{ sbi_keystores_dest }}/each_copied_keystore_file"
+sbi_keystores_mode: "0750"
+
+# List of folders to create
 sbi_folders:
   - {name: "bin", path: "{{ sbi_appbase }}/bin", mode: "{{ sbi_bin_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_bin_t"}
   - {name: "run", path: "{{ sbi_run_dir }}", mode: "{{ sbi_run_dir_mode }}", owner: "springboot", group: "springboot", seltype: "springboot_run_t"}

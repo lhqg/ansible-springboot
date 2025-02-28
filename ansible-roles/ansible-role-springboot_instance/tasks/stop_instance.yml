@@ -9,8 +9,6 @@
 
 - name: "Orderly attempt to stop systemd unit {{ sbi_servicename }}"
   when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version|int >= 7
     - sbi_become
   block:
     # do not confuse this with the service status !
@@ -20,8 +18,8 @@
       become: "{{ sbi_become }}"
       register: sbi_systemd_result
 
-    # Stop1: First trial to stop the Springboot instance
-    - name: "Stop Springoot instance (RHEL 7/8)"
+    # Stop1: First attempt to stop the Springboot instance
+    - name: "Stop Springoot instance"
       ansible.builtin.systemd:
         name: "{{ sbi_service_name }}"
         state: stopped
@@ -37,7 +35,8 @@
 
 # Stop2 (last chance): Try to stop any Java process with the AppName
 - name: "Stop the Springboot Server (via process identification), using pkill command for any java process started with our app_name as argument"
-  ansible.builtin.shell: pkill -f '^([^/]*/)*java\s+(.*?\s+)?-DAPP_NAME={{ sbi_appname | regex_escape() }}(\s+.*)?$'
+  ansible.builtin.shell: |
+    pkill -f '^([^/]*/)*java\s+(.*?\s+)?-DAPP_NAME={{ sbi_appname | regex_escape() }}(\s+.*)?$'
   become: "{{ sbi_become }}"
   register: sbi_pkill_output_cmd
   failed_when: sbi_pkill_output_cmd.stderr_lines|length > 0

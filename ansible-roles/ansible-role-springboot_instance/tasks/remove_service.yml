@@ -1,5 +1,5 @@
 ---
-# Remove Springboot service for RHEL 7/8
+# Remove Spring Boot app service
 # - name: Stop service
 #   ansible.builtin.service:
 #     name: "{{ sbi_service_name }}"

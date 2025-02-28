@@ -1,8 +1,8 @@
 ---
 - name: "Deploy audit rules for READ critical filesystem objects of {{ sbi_appname }}"
   ansible.builtin.template:
-    src: audit-rules_read.j2
-    dest: "/etc/audit/rules.d/010-{{ sbi_appname }}-read.rules"
+    src: audits/audit-rules_read.j2
+    dest: "/etc/audit/rules.d/{{ sbi_audit_rules_ordering }}-{{ sbi_appname }}-read.rules"
     owner: root
     group: root
     mode: "0400"
@@ -14,8 +14,8 @@
 
 - name: "Deploy audit rules for WRITE critical filesystem objects of {{ sbi_appname }}"
   ansible.builtin.template:
-    src: audit-rules_write.j2
-    dest: "/etc/audit/rules.d/010-{{ sbi_appname }}-write.rules"
+    src: audits/audit-rules_write.j2
+    dest: "/etc/audit/rules.d/{{ sbi_audit_rules_ordering }}-{{ sbi_appname }}-write.rules"
     owner: root
     group: root
     mode: "0400"

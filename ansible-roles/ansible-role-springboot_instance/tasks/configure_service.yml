@@ -1,8 +1,8 @@
 ---
-# Register a new Springboot service for RHEL 7/8
+# Register a new Spring Boot app service
 - name: "Install Springboot service environment file"
   ansible.builtin.template:
-    src: service-env.j2
+    src: configure_service/service-env.j2
     dest: "{{ sbi_service_env_filename }}"
     owner: springboot
     group: springboot

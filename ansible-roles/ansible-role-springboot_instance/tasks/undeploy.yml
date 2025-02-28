@@ -6,7 +6,7 @@
 - name: "Remove Springboot service"
   ansible.builtin.include_tasks: remove_service.yml
 
-- name: Remove files (only on RHEL7 and higher)
+- name: Remove Spring Boot app files
   block:
     - name: Find extra files
       ansible.builtin.find:
