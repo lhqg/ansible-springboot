@@ -25,8 +25,20 @@
   become: "{{ sbi_become }}"
   when: sbi_audit_keyword_write is defined and sbi_audit_keyword_write|length > 0
 
-- name: "Refresh Audit subsystem with new rules for {{ sbi_appname }}"
-  ansible.builtin.shell: >
-    /bin/bash -c "augenrules --load"
-  changed_when: true
-  become: "{{ sbi_become }}"
+- name: "Attempt to refresh Audit subsystem with new rules for {{ sbi_appname }}"
+  block:
+    - name: "Refresh Audit subsystem with new rules for {{ sbi_appname }}"
+      ansible.builtin.shell: >
+        /bin/bash -c "augenrules --load"
+      changed_when: true
+      become: "{{ sbi_become }}"
+  rescue:
+    - name: "Rescue - Refresh Audit subsystem with new rules for {{ sbi_appname }}"
+      ansible.builtin.debug:
+        msg: >
+          WARNING: Failed to refresh the Auditing subsystem with the new rules
+          to watch the {{ sbi_appname }} Springboot application resources.
+          Probable cause is the Audit rules are protected and cannot be altered
+          after the system is booted.
+
+...

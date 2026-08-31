@@ -4,7 +4,7 @@
 
 - name: "Create LVs/FSes"
   ansible.builtin.include_tasks: lvm.yml
-  when: sbf_dedicated_lv_opt or sbf_dedicated_lv_srv or sbf_dedicated_lv_log
+  when: "sbf_dedicated_lv_opt or sbf_dedicated_lv_srv or sbf_dedicated_lv_log"
 
 - name: "Deploy SELinux policy"
   ansible.builtin.include_tasks: selinux.yml
@@ -17,3 +17,5 @@
 
 - name: "Install SystemD service template"
   ansible.builtin.include_tasks: service.yml
+
+...

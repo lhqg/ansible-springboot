@@ -20,7 +20,7 @@
     setype: springboot_monitoring_port_t
     state: present
   become: "{{ sbi_become }}"
-  when: sbi_monitoring_port is defined
+  when: "sbi_monitoring_port is defined"
 
 - name: "Switch SELinux boolean to allow Springboot application to create and map/execute dynamic libraries"
   community.general.seboolean:
@@ -28,4 +28,6 @@
     state: true
     persistent: true
   become: "{{ sbi_become }}"
-  when: sbi_enable_dynlibs is defined and sbi_enable_dynlibs
+  when: "sbi_enable_dynlibs is defined and sbi_enable_dynlibs"
+
+...

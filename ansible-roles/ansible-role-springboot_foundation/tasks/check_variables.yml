@@ -3,7 +3,7 @@
 - name: "Check for mandatory variables"
   ansible.builtin.fail:
     msg: "{{ item }} was not defined. Please check the role documentation."
-  when: vars[item] is not defined
+  when: "vars[item] is not defined"
   loop:
     - sbf_user_id
     - sbf_group_id
@@ -15,19 +15,21 @@
   ansible.builtin.fail:
     msg: "sbf_dedicated_vg_opt must be defined."
   when:
-    - sbf_dedicated_lv_opt
-    - sbf_dedicated_vg_opt is not defined
+    - "sbf_dedicated_lv_opt"
+    - "sbf_dedicated_vg_opt is not defined"
 
 - name: "Check for LVM consistency on /srv/springboot LV/FS"
   ansible.builtin.fail:
     msg: "sbf_dedicated_vg_srv must be defined."
   when:
-    - sbf_dedicated_lv_srv
-    - sbf_dedicated_vg_srv is not defined
+    - "sbf_dedicated_lv_srv"
+    - "sbf_dedicated_vg_srv is not defined"
 
 - name: "Check for LVM consistency on /var/log/springboot LV/FS"
   ansible.builtin.fail:
     msg: "sbf_dedicated_vg_log must be defined."
   when:
-    - sbf_dedicated_lv_log
-    - sbf_dedicated_vg_log is not defined
+    - "sbf_dedicated_lv_log"
+    - "sbf_dedicated_vg_log is not defined"
+
+...

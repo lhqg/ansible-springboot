@@ -56,3 +56,5 @@
     bash -c "/sbin/restorecon -RFi /{opt,srv}/springboot /var/{log,lib,tmp}/springboot"
   changed_when: true
   become: "{{ sbf_become }}"
+
+...

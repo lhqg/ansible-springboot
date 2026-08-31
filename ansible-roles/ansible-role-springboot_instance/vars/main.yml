@@ -5,8 +5,8 @@
 sbi_service_name: "springboot@{{ sbi_appname }}"
 
 # keywords for audit rules
-sbi_audit_keyword_read: ~
-sbi_audit_keyword_write: ~
+sbi_audit_keyword_read: ""
+sbi_audit_keyword_write: ""
 
 # Directories where the Spring Boot app is deployed, and where it works
 sbi_appbase: "/opt/springboot/{{ sbi_appname }}"
@@ -55,3 +55,5 @@ sbi_folders:
 # WARNING:
 #  The folders {{ sbi_extra_files_dest }} shouldn't be automatically created by using {{ sbi_folders }}
 #      since the default is the same with sbi_jar_location and might affect the rights of this folder !
+
+...

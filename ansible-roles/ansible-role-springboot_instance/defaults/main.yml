@@ -32,8 +32,8 @@ sbi_log_symlink: false
 sbi_enable_dynlibs: false
 
 # keywords for audit rules
-sbi_audit_keyword_read: ~
-sbi_audit_keyword_write: ~
+sbi_audit_keyword_read: ""
+sbi_audit_keyword_write: ""
 sbi_audit_rules_ordering: "010"
 
 # Springboot instance log file retention (days)
@@ -50,3 +50,5 @@ sbi_undeploy: false
 
 sbi_remove_extra_files: false
 sbi_remove_keystores: false
+
+...

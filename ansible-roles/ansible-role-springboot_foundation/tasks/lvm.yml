@@ -7,14 +7,14 @@
     size: "{{ sbf_default_fs_size_g }}g"
     state: present
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_opt
+  when: "sbf_dedicated_lv_opt"
 
 - name: "Initialise the XFS filesystem for /opt/springboot"
   community.general.filesystem:
     fstype: "{{ sbf_fstype }}"
     dev: "/dev/{{ sbf_dedicated_vg_opt }}/lv_opt_springboot"
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_opt
+  when: "sbf_dedicated_lv_opt"
 
 - name: "Mount /opt/springboot LV/FS"
   community.general.mount:
@@ -23,7 +23,7 @@
     fstype: "{{ sbf_fstype }}"
     state: mounted
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_opt
+  when: "sbf_dedicated_lv_opt"
 
 - name: "Create LV for /srv/springboot"
   community.general.lvol:
@@ -32,14 +32,14 @@
     size: "{{ sbf_default_fs_size_g }}g"
     state: present
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_srv
+  when: "sbf_dedicated_lv_srv"
 
 - name: "Initialise the XFS filesystem for /srv/springboot"
   community.general.filesystem:
     fstype: "{{ sbf_fstype }}"
     dev: "/dev/{{ sbf_dedicated_vg_srv }}/lv_srv_springboot"
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_srv
+  when: "sbf_dedicated_lv_srv"
 
 - name: "Mount /srv/springboot LV/FS"
   community.general.mount:
@@ -48,7 +48,7 @@
     fstype: "{{ sbf_fstype }}"
     state: mounted
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_srv
+  when: "sbf_dedicated_lv_srv"
 
 - name: "Create LV for /var/log/springboot"
   community.general.lvol:
@@ -57,14 +57,14 @@
     size: "{{ sbf_default_fs_size_g }}g"
     state: present
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_log
+  when: "sbf_dedicated_lv_log"
 
 - name: "Initialise the XFS filesystem for /var/log/springboot"
   community.general.filesystem:
     fstype: "{{ sbf_fstype }}"
     dev: "/dev/{{ sbf_dedicated_vg_log }}/lv_log_springboot"
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_log
+  when: "sbf_dedicated_lv_log"
 
 - name: "Mount /var/log/springboot LV/FS"
   community.general.mount:
@@ -73,4 +73,6 @@
     fstype: "{{ sbf_fstype }}"
     state: mounted
   become: "{{ sbf_become }}"
-  when: sbf_dedicated_lv_log
+  when: "sbf_dedicated_lv_log"
+
+...

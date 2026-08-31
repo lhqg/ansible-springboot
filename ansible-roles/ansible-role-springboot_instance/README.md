@@ -36,25 +36,25 @@ IMPORTANT: for all `*_mode` variables, the value MUST be surrounded with quotes 
   - `sbi_appbase_conf_location`: The destination directory for the configuration files. (Default: "`sbi_appbase`/conf")
   - `sbi_java_security_file`: Location of the Java VM security properties files specific to the Springboot application. (Default: "`sbi_appbase_conf_location`/java.security")
 
-  - `sbi_run_handlers`: Should the `Start Springboot instance` and `Cleanup workdir` handlers run automatically, or not. (Default: `yes`)
-  - `sbi_cleanup_entire_workdir`: Should remove the entire `sbi_workdir` (not only the file `sbi_workdir`/`sbi_appjarname`), or not. Default value: "no". (**This works only if `sbi_run_handlers` is set on "yes" ("true") !**)
+  - `sbi_run_handlers`: Should the `Start Springboot instance` and `Cleanup workdir` handlers run automatically, or not. (Default: `true`)
+  - `sbi_cleanup_entire_workdir`: Should remove the entire `sbi_workdir` (not only the file `sbi_workdir`/`sbi_appjarname`), or not. Default value: "false". (**This works only if `sbi_run_handlers` is set on "true" ("true") !**)
 
   - `sbi_listen_port`: TCP port the application binds to and listens on, for SELinux port to be labelled. (Default: 8443)
   - `sbi_memory_max_heapsize_mb`: Maximum heap size (in MiB) for the Java VM.((Default: 768)
   - `sbi_memory_min_heapsize_mb`: Minimum heap size (in MiB) for the Java VM.((Default: 384)
   - `sbi_memory_stacksize_kb`: Stack size (in KiB) for the Java VM. (Default: 220)
-  - `sbi_memory_hugepages`: Whether the Java VM will use huge memory pages (2MiB pages instead of standard 4KiB). (Default: no)
+  - `sbi_memory_hugepages`: Whether the Java VM will use huge memory pages (2MiB pages instead of standard 4KiB). (Default: false)
 
   - `sbi_i18n_lang`: Value for the LANG environment variable for the Java VM. (Default: "en_US.UTF-8")
 
-  - `sbi_enable_service`: Whether the systemd service unit for the Springboot application should be enabled (started at boot time). (Default: yes)
+  - `sbi_enable_service`: Whether the systemd service unit for the Springboot application should be enabled (started at boot time). (Default: true)
   - `sbi_startup_timeout_sec`: Delay (in seconds) for the Springboot application to startup correctly. (Default: 10)
 
   - `sbi_java_version`: Version of the Java runtime. (Default: 11)
   - `sbi_java_flavour`: Flavour of the Java runtime. (Default: "openjdk")
   - `sbi_java_extra_args`: Extra arguments for the Java VM, value is passed to the Java process by the systemd service unit environment file (`service-env.j2`jinja2 template). (Default: empty.)
   - `sbi_java_tmpdir`:  Location for Java temporary files. (Default: "`/srv/springboot`/`sbi_appname`")
-  - `sbi_log_symlink`: Whether a `logs`symbolic link should be created in `sbi_appbase` to point to `sbi_log_dir`. (Default: `no`)
+  - `sbi_log_symlink`: Whether a `logs`symbolic link should be created in `sbi_appbase` to point to `sbi_log_dir`. (Default: `false`)
 
   - `sbi_enable_dynlibs`: Whether the Springboot appliction is allowed to create dynamic libraries or equivalent. (Default: false)
 
@@ -84,14 +84,14 @@ If you don't want the handlers to be run at the end of the role execution, you s
 ```yaml
   post_tasks:
     - set_fact:
-        sbi_run_handlers: yes
+        sbi_run_handlers: true
 ```
 
 ```yaml
 ---
 # Definition of defaults file for ansible-role-springboot_instance
 
-sbi_become: yes
+sbi_become: true
 
 sbi_workdir: /var/tmp/springboot
 sbi_appbase: "/opt/springboot/{{ sbi_appname }}"
@@ -105,8 +105,8 @@ sbi_java_security_file: "{{ sbi_appbase_conf_location }}/java.security"
 sbi_keystores_dest: "{{ sbi_appbase }}/keys"
 sbi_log_dir: "/var/log/springboot/{{ sbi_appname }}"
 sbi_srv_dir: "/srv/springboot/{{ sbi_appname }}"
-sbi_run_handlers: yes
-sbi_cleanup_entire_workdir: no
+sbi_run_handlers: true
+sbi_cleanup_entire_workdir: false
 sbi_extra_files_dest: "{{ sbi_jar_location }}"
 sbi_appbase_mode: "0750"
 
@@ -116,11 +116,11 @@ sbi_listen_port: 8443
 sbi_memory_max_heapsize_mb: 768
 sbi_memory_min_heapsize_mb: 384
 sbi_memory_stacksize_kb: 220
-sbi_memory_hugepages: no
+sbi_memory_hugepages: false
 
 sbi_i18n_lang: "en_US.UTF-8"
 
-sbi_enable_service: yes
+sbi_enable_service: true
 sbi_startup_timeout_sec: 10
 sbi_app_log_file: "{{ sbi_log_dir }}/{{ sbi_appname }}-{{ sbi_app_version }}.log"
 
@@ -128,7 +128,7 @@ sbi_java_version: 11
 sbi_java_flavour: "openjdk"
 sbi_java_extra_args: ""
 sbi_java_tmpdir: "{{ sbi_srv_dir }}"
-sbi_log_symlink: no
+sbi_log_symlink: false
 
 sbi_enable_dynlibs: false
 
@@ -189,7 +189,7 @@ sbi_appjarname: "MyApp-{{ sbi_app_version }}.jar"
 sbi_keystores_src: "{{ playbook_dir }}/files/keys"
 sbi_keystores_dest: "{{ sbi_appbase }}/keys"
 sbi_java_extra_args: "-Dserver.ssl.key-store=file:{{ sbi_keystores_dest }}/{{ sbi_appname }}_keystore1.jks -Dserver.ssl.key-store-password={{ my_app_keystore_vault_password_var }}"
-sbi_cleanup_entire_workdir: yes
+sbi_cleanup_entire_workdir: true
 ```
 
 Role execution flow
@@ -203,8 +203,8 @@ At runtime, the role will perform the following actions:
 - Copy all the configuration files via template (see: `sbi_conf_src` & `sbi_appbase_conf_location`)
 - Copy extra binary files if they exist (and if `sbi_extra_files_src` & `sbi_extra_files_dest` are defined and non-empty)
 - Copy keystores & certificates if they exist. (*User/Consumer have to add them to the springboot application config !*, see: [Using Keystores](#keystore))
-- Start the service via handler (if `sbi_run_handlers` is `yes`/`true`)
-- Cleanup the working directory via handler (if `sbi_run_handlers` is `yes`/`true`)
+- Start the service via handler (if `sbi_run_handlers` is `true`)
+- Cleanup the working directory via handler (if `sbi_run_handlers` is `true`)
 
 Dependencies
 -------------
