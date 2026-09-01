@@ -1,0 +1,92 @@
+---
+- name: "Cleanup Springboot application base directory {{ springboot_instance__appbase }}"
+  ansible.builtin.file:
+    path: "{{ springboot_instance__appbase }}/"
+    state: absent
+    follow: false
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create base directory springboot_instance__appbase={{ springboot_instance__appbase }}"
+  ansible.builtin.file:
+    path: "{{ springboot_instance__appbase }}"
+    state: directory
+    mode: "{{ springboot_instance__appbase_mode }}"
+    owner: springboot
+    group: springboot
+    seuser: system_u
+    serole: object_r
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create log directory springboot_instance__log_dir={{ springboot_instance__log_dir }}"
+  ansible.builtin.file:
+    path: "{{ springboot_instance__log_dir }}"
+    state: directory
+    mode: "{{ springboot_instance__log_dir_mode }}"
+    owner: springboot
+    group: springboot
+    seuser: system_u
+    serole: object_r
+    setype: springboot_log_t
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create tmp/cache/work directory springboot_instance__srv_dir={{ springboot_instance__srv_dir }}"
+  ansible.builtin.file:
+    path: "{{ springboot_instance__srv_dir }}"
+    state: directory
+    mode: "{{ springboot_instance__log_dir_mode }}"
+    owner: springboot
+    group: springboot
+    seuser: system_u
+    serole: object_r
+    setype: springboot_var_t
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create dynamic libraries subdirectory dynlib in {{ springboot_instance__srv_dir }}"
+  ansible.builtin.file:
+    path: "{{ springboot_instance__srv_dir }}/dynlib"
+    state: directory
+    mode: "{{ springboot_instance__log_dir_mode }}"
+    owner: springboot
+    group: springboot"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_dynlib_t
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create application subdirectories with default/configured ownership & permissions in {{ springboot_instance__appbase }}"
+  ansible.builtin.file:
+    path: "{{ _folder.path }}"
+    state: directory
+    mode: "{{ _folder.mode }}"
+    owner: "{{ _folder.owner }}"
+    group: "{{ _folder.group }}"
+    seuser: system_u
+    serole: object_r
+    setype: "{{ _folder.seltype }}"
+  loop: "{{ springboot_instance__folders }}"
+  loop_control:
+    loop_var: _folder
+  when: _folder.path != springboot_instance__appbase
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create symlink logs in {{ springboot_instance__appbase }}"
+  when: springboot_instance__log_symlink
+  block:
+    - name: "Stat logs in {{ springboot_instance__appbase }}"
+      ansible.builtin.stat:
+        path: "{{ springboot_instance__appbase }}/logs"
+      become: "{{ springboot_instance__become }}"
+      register: springboot_instance___stat_dest_logs_dir
+
+    - name: "Create logs symlink"
+      ansible.builtin.file:
+        src: "{{ springboot_instance__log_dir }}"
+        dest: "{{ springboot_instance__appbase }}/logs"
+        owner: "{{ springboot_instance__log_dir_user }}"
+        group: "{{ springboot_instance__log_dir_group }}"
+        state: link
+        force: true
+      become: "{{ springboot_instance__become }}"
+      when: not springboot_instance___stat_dest_logs_dir.stat.exists
+
+...

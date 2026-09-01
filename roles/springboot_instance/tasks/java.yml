@@ -1,0 +1,34 @@
+---
+- name: "Install Java > 8"
+  when: "( springboot_instance__java_flavour != 'oracle' ) and ( springboot_instance__java_version > 8 )"
+  block:
+    - name: "Install java"
+      ansible.builtin.package:
+        name: java-{{ springboot_instance__java_version }}-{{ springboot_instance__java_flavour }}-headless.x86_64
+        state: present
+      become: "{{ springboot_instance__become }}"
+
+    - name: "Create symlink to Java home"
+      ansible.builtin.file:
+        state: link
+        dest: "{{ springboot_instance__appbase }}/java_home"
+        src: "/etc/alternatives/jre_{{ springboot_instance__java_version }}_{{ springboot_instance__java_flavour }}"
+      become: "{{ springboot_instance__become }}"
+
+- name: "Install Java 8"
+  when: "( springboot_instance__java_flavour != 'oracle' ) and ( springboot_instance__java_version == 8 )"
+  block:
+    - name: "Install java"
+      ansible.builtin.package:
+        name: java-1.{{ springboot_instance__java_version }}.0-{{ springboot_instance__java_flavour }}-headless.x86_64
+        state: present
+      become: "{{ springboot_instance__become }}"
+
+    - name: "Create symlink to Java home"
+      ansible.builtin.file:
+        state: link
+        dest: "{{ springboot_instance__appbase }}/java_home"
+        src: "/etc/alternatives/jre_1.{{ springboot_instance__java_version }}.0_{{ springboot_instance__java_flavour }}"
+      become: "{{ springboot_instance__become }}"
+
+...

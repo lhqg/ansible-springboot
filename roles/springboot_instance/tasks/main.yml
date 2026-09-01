@@ -1,0 +1,19 @@
+---
+- name: "Deploy Springboot instance"
+  ansible.builtin.include_tasks: core.yml
+  when:
+    - not springboot_instance__undeploy
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version|int >= 7
+    - ansible_distribution != "Fedora" or ( ansible_distribution == "Fedora" and ansible_distribution_major_version|int >= 34 )
+
+- name: "Undeploy Springboot instance"
+  ansible.builtin.include_tasks: undeploy.yml
+  when:
+    - springboot_instance__undeploy
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version|int >= 7
+    - ansible_distribution != "Fedora" or ( ansible_distribution == "Fedora" and ansible_distribution_major_version|int >= 34 )
+    - springboot_instance__become
+
+...

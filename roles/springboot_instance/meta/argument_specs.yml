@@ -1,0 +1,111 @@
+---
+argument_specs:
+  main:
+    short_description: Ansible role to deploy a specific Springboot application instance
+    description:
+      - Deploys a specific Springboot application instance on top of foundations
+    options:
+      sbf_become:
+        description: Whether to use the Ansible become functionality
+        type: bool
+        default: false
+        required: false
+      springboot_instance__appname:
+        description: Name of the Springboot application instance to deploy
+        type: str
+        default: ""
+        required: true
+      springboot_instance__appjarname:
+        description: Name of the Springboot application jar file to deploy
+        type: str
+        default: ""
+        required: true
+      springboot_instance__listen_port:
+        description: Port on which the Springboot application instance will listen
+        type: int
+        default: 8443
+        required: false
+      springboot_instance__monitoring_port:
+        description: Port on which the Springboot application instance will expose monitoring endpoints
+        type: int
+        default: null
+        required: false
+      springboot_instance__enable_service:
+        description: Whether to enable the systemd service for the Springboot application instance
+        type: bool
+        default: true
+        required: false
+      springboot_instance__startup_timeout_sec:
+        description: Timeout in seconds for the Springboot application instance to start
+        type: int
+        default: 10
+        required: false
+      springboot_instance__memory_max_heapsize_mb:
+        description: Maximum Java heap size in MiB for the Springboot application instance
+        type: int
+        default: 768
+        required: false
+      springboot_instance__memory_min_heapsize_mb:
+        description: Minimum Java heap size in MiB for the Springboot application instance
+        type: int
+        default: 384
+        required: false
+      springboot_instance__memory_stacksize_kb:
+        description: Java Stack size in KiB for the Springboot application instance
+        type: int
+        default: 220
+        required: false
+      springboot_instance__memory_hugepages:
+        description: Whether to use huge pages for the Springboot application instance
+        type: bool
+        default: false
+        required: false
+      springboot_instance__java_version:
+        description: Version of the Java VM to use to run the Springboot application instance
+        type: int
+        default: 11
+        choices:
+          - 8
+          - 11
+          - 17
+          - 21
+          - 25
+        required: false
+      springboot_instance__java_flavour:
+        description: "Flavour/variant of the Java VM to use to run the Springboot application instance"
+        type: str
+        default: "openjdk"
+        choices:
+          - "openjdk"
+          - "oracle"
+        required: false
+      springboot_instance__java_extra_args:
+        description: >-
+          Extra arguments/options to be added to the Java VM command line
+          to run the Springboot application instance
+        type: str
+        default: ""
+        required: false
+      springboot_instance__enable_dynlibs:
+        description: >-
+          Whether to the allow the Springboot application instance to create
+          and map/execute dynamic libraries
+        type: bool
+        default: false
+        required: false
+      springboot_instance__audit_keyword_read:
+        description: >-
+          Keyword to include in auditing events when a read is performed on
+          critical resources for the Springboot application instance
+        type: str
+        default: None
+        required: false
+      springboot_instance__audit_keyword_write:
+        description: >-
+          Keyword to include in auditing events when a write is performed on
+          critical resources for the Springboot application instance
+        type: str
+        default: None
+        required: false
+
+...

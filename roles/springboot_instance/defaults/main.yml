@@ -1,0 +1,54 @@
+---
+# Definition of defaults file for ansible-role-springboot_instance
+
+springboot_instance__become: true
+
+springboot_instance__workdir: /var/tmp/springboot
+springboot_instance__conf_src: "{{ playbook_dir }}/files/conf"
+
+springboot_instance__run_handlers: true
+springboot_instance__cleanup_entire_workdir: false
+springboot_instance__extra_files_dest: "{{ springboot_instance__jar_location }}"
+
+springboot_instance__listen_port: 8443
+springboot_instance__monitoring_port: ~
+
+springboot_instance__memory_max_heapsize_mb: 768
+springboot_instance__memory_min_heapsize_mb: 384
+springboot_instance__memory_stacksize_kb: 220
+springboot_instance__memory_hugepages: false
+
+springboot_instance__i18n_lang: "en_US.UTF-8"
+
+springboot_instance__enable_service: true
+springboot_instance__startup_timeout_sec: 10
+
+springboot_instance__java_version: 11
+springboot_instance__java_flavour: "openjdk"
+springboot_instance__java_extra_args: ""
+springboot_instance__java_tmpdir: "{{ springboot_instance__srv_dir }}"
+springboot_instance__log_symlink: false
+
+springboot_instance__enable_dynlibs: false
+
+# keywords for audit rules
+springboot_instance__audit_keyword_read: ""
+springboot_instance__audit_keyword_write: ""
+springboot_instance__audit_rules_ordering: "010"
+
+# Springboot instance log file retention (days)
+springboot_instance__log_dir_retention_days: 30
+
+# dir/files permissions for "{{ springboot_instance__extra_files_dest }}/"
+#   "{{ springboot_instance__extra_files_dest }}/each_copied_extra_file"
+springboot_instance__extra_files_mode: "0750"
+
+# Various defaults
+
+# Default is to deploy, not to undeploy
+springboot_instance__undeploy: false
+
+springboot_instance__remove_extra_files: false
+springboot_instance__remove_keystores: false
+
+...

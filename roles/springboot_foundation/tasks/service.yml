@@ -1,0 +1,15 @@
+---
+- name: "Ensure the springboot-systemd RPM is present"
+  ansible.builtin.package:
+    name: springboot-systemd
+    state: present
+  become: "{{ springboot_foundation__become }}"
+
+- name: "Enable the systemd Springboot target unit"
+  ansible.builtin.systemd:
+    name: "springboot.target"
+    enabled: "{{ springboot_foundation__systemd_target_enabled }}"
+    daemon_reload: true
+  become: "{{ springboot_foundation__become }}"
+
+...

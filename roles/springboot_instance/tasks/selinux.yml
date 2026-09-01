@@ -1,0 +1,33 @@
+---
+- name: "Restore SELinux fcontexts for {{ springboot_instance__appname }}"
+  ansible.builtin.shell: >
+    /bin/bash -c "/sbin/restorecon -RFi {{ springboot_instance__appbase }} {{ springboot_instance__log_dir }} {{ springboot_instance__srv_dir }}"
+  changed_when: true
+  become: "{{ springboot_instance__become }}"
+
+- name: "Add SELinux type to listen port {{ springboot_instance__listen_port }}"
+  community.general.seport:
+    ports: "{{ springboot_instance__listen_port }}"
+    proto: tcp
+    setype: springboot_port_t
+    state: present
+  become: "{{ springboot_instance__become }}"
+
+- name: "Add SELinux type to monitoring port {{ springboot_instance__monitoring_port }}"
+  community.general.seport:
+    ports: "{{ springboot_instance__monitoring_port }}"
+    proto: tcp
+    setype: springboot_monitoring_port_t
+    state: present
+  become: "{{ springboot_instance__become }}"
+  when: "springboot_instance__monitoring_port is defined"
+
+- name: "Switch SELinux boolean to allow Springboot application to create and map/execute dynamic libraries"
+  community.general.seboolean:
+    name: allow_springboot_dynamic_libs
+    state: true
+    persistent: true
+  become: "{{ springboot_instance__become }}"
+  when: "springboot_instance__enable_dynlibs is defined and springboot_instance__enable_dynlibs"
+
+...
