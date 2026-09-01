@@ -14,6 +14,7 @@ tags:
   - application
 repository: "https://github.com/lhqg/ansible-springboot"
 dependencies:
-  "community.general": ">=1.0.0"
+  "community.general": ">=10.0.0"
+  "ansible.posix": ">=2.0.0"
 
 ...

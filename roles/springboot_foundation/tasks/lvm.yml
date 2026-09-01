@@ -17,7 +17,7 @@
   when: "springboot_foundation__dedicated_lv_opt"
 
 - name: "Mount /opt/springboot LV/FS"
-  community.general.mount:
+  ansible.posix.mount:
     path: /opt/springboot
     src: "/dev/{{ springboot_foundation__dedicated_vg_opt }}/lv_opt_springboot"
     fstype: "{{ springboot_foundation__fstype }}"
@@ -42,7 +42,7 @@
   when: "springboot_foundation__dedicated_lv_srv"
 
 - name: "Mount /srv/springboot LV/FS"
-  community.general.mount:
+  ansible.posix.mount:
     path: /srv/springboot
     src: "/dev/{{ springboot_foundation__dedicated_vg_srv }}/lv_srv_springboot"
     fstype: "{{ springboot_foundation__fstype }}"
@@ -67,7 +67,7 @@
   when: "springboot_foundation__dedicated_lv_log"
 
 - name: "Mount /var/log/springboot LV/FS"
-  community.general.mount:
+  ansible.posix.mount:
     path: /var/log/springboot
     src: "/dev/{{ springboot_foundation__dedicated_vg_log }}/lv_log_springboot"
     fstype: "{{ springboot_foundation__fstype }}"
