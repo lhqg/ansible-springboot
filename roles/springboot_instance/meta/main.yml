@@ -1,5 +1,8 @@
 ---
 galaxy_info:
+  company: LHQG
+  namespace: lhqg
+  role_name: springboot_instance
   author: Hubert Quarantel-Colombani
   description: Role for deploying Springboot application instance
   license: license (GPLv3, CC-BY, etc)
