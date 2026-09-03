@@ -5,7 +5,7 @@ argument_specs:
     description:
       - Deploys a specific Springboot application instance on top of foundations
     options:
-      sbf_become:
+      springboot_instance__become:
         description: Whether to use the Ansible become functionality
         type: bool
         default: false

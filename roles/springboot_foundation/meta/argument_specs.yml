@@ -8,59 +8,62 @@ argument_specs:
       - Installs and configures SELinux policy modules
       - Deploys systemd service templates for Springboot applications service units
     options:
-      sbf_user_id:
+      springboot_foundation__user_id:
         description: User ID for Springboot applications user
         type: int
         default: 5000
         required: false
-      sbf_group_id:
+      springboot_foundation__group_id:
         description: Group ID for Springboot applications group
         type: int
         default: 5000
         required: false
-      sbf_become:
+      springboot_foundation__become:
         description: Whether to use the Ansible become functionality
         type: bool
         default: false
         required: false
-      sbf_dedicated_lv_opt:
+      springboot_foundation__dedicated_lv_opt:
         description: Whether to create a dedicated LVM logical volume for /opt/springboot
         type: bool
         default: true
-      sbf_dedicated_vg_opt:
+        required: false
+      springboot_foundation__dedicated_vg_opt:
         description: LVM volume group for /opt/springboot
         type: str
         default: None
         required: false
-      sbf_dedicated_lv_srv:
+      springboot_foundation__dedicated_lv_srv:
         description: Whether to create a dedicated LVM logical volume for /srv/springboot
         type: bool
         default: true
-      sbf_dedicated_vg_srv:
+        required: false
+      springboot_foundation__dedicated_vg_srv:
         description: LVM volume group for /srv/springboot
         type: str
         default: None
-        required: true
-      sbf_dedicated_lv_log:
+        required: false
+      springboot_foundation__dedicated_lv_log:
         description: Whether to create a dedicated LVM logical volume for /var/log/springboot
         type: bool
         default: true
-      sbf_dedicated_vg_log:
+        required: false
+      springboot_foundation__dedicated_vg_log:
         description: LVM volume group for /var/log/springboot
         type: str
         default: None
         required: false
-      sbf_default_fs_size_g:
+      springboot_foundation__default_fs_size_g:
         description: Default filesystem size (GiB)for Springboot applications
         type: int
         default: 1
         required: false
-      sbf_fstype:
+      springboot_foundation__fstype:
         description: Filesystem type for Springboot applications
         type: str
         default: xfs
         required: false
-      sbf_systemd_target_enabled:
+      springboot_foundation__systemd_target_enabled:
         description: Whether to enable the systemd Springboot target unit
         type: bool
         default: true
