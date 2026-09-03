@@ -1,6 +1,6 @@
 ---
-- name: sample
-  hosts: "LHQG Sample playbook to test Ansible Springboot roles"
+- name: "Sample playbook to test Ansible Springboot roles"
+  hosts: all
   gather_facts: true
 
   vars:
