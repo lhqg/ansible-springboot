@@ -1,0 +1,15 @@
+---
+# Variables for ansible-role-springboot_foundation
+
+springboot_foundation__dedicated_lv_opt: true
+springboot_foundation__dedicated_vg_opt: ~
+
+springboot_foundation__dedicated_lv_srv: true
+springboot_foundation__dedicated_vg_srv: ~
+
+springboot_foundation__dedicated_lv_log: true
+springboot_foundation__dedicated_vg_log: ~
+
+springboot_foundation__fstype: "xfs"
+
+...

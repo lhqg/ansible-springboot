@@ -1,0 +1,45 @@
+---
+
+# Tasks to attempt to stop the Springboot instance
+# Tries to first stop the server via an existing service.
+# If that fails, it will check if the application folder
+# exists and try to stop the server from command line.
+
+# Attempt to stop the existing service
+
+- name: "Orderly attempt to stop systemd unit {{ springboot_instance__servicename }}"
+  when:
+    - springboot_instance__become
+  block:
+    # do not confuse this with the service status !
+    - name: "Check service-file (systemd unit-file) status"
+      ansible.builtin.systemd:
+        name: "{{ springboot_instance__service_name }}"
+      become: "{{ springboot_instance__become }}"
+      register: springboot_instance__systemd_result
+
+    # Stop1: First attempt to stop the Springboot instance
+    - name: "Stop Springoot instance"
+      ansible.builtin.systemd:
+        name: "{{ springboot_instance__service_name }}"
+        state: stopped
+      become: "{{ springboot_instance__become }}"
+      register: springboot_instance__service_stop
+      when:
+        - springboot_instance__systemd_result is defined and springboot_instance__systemd_result.status is defined
+        - springboot_instance__systemd_result.status.UnitFileState is defined and springboot_instance__systemd_result.status.UnitFileState == 'enabled'
+
+    - name: "Output of stop attempt using systemd"
+      ansible.builtin.debug:
+        var: springboot_instance__service_stop
+
+# Stop2 (last chance): Try to stop any Java process with the AppName
+- name: "Stop the Springboot Server (via process identification), using pkill command for any java process started with our app_name as argument"
+  ansible.builtin.shell: |
+    pkill -f '^([^/]*/)*java\s+(.*?\s+)?-DAPP_NAME={{ springboot_instance__appname | regex_escape() }}(\s+.*)?$'
+  become: "{{ springboot_instance__become }}"
+  register: springboot_instance__pkill_output_cmd
+  failed_when: springboot_instance__pkill_output_cmd.stderr_lines|length > 0
+  changed_when: springboot_instance__pkill_output_cmd.rc == 0
+
+...

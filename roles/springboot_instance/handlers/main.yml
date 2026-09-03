@@ -1,0 +1,25 @@
+---
+- name: "Start Springboot instance"
+  ansible.builtin.service:
+    name: "{{ springboot_instance__service_name }}"
+    state: started
+  become: "{{ springboot_instance__become }}"
+  when: springboot_instance__run_handlers and springboot_instance__become
+
+- name: "Restart Springboot instance"
+  ansible.builtin.service:
+    name: "{{ springboot_instance__service_name }}"
+    state: restarted
+  become: "{{ springboot_instance__become }}"
+  when: springboot_instance__become
+
+- name: "Cleanup workdir"
+  ansible.builtin.file:
+    path: "{{ springboot_instance__workdir }}/{{ springboot_instance__appjarname
+      if (springboot_instance__cleanup_entire_workdir is not defined or not springboot_instance__cleanup_entire_workdir)
+      else '' }}"
+    state: absent
+  become: "{{ springboot_instance__become }}"
+  when: springboot_instance__run_handlers
+
+...

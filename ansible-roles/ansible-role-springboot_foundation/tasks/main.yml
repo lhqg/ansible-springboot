@@ -1,7 +1,0 @@
----
-- name: "Deploy Springboot foundation"
-  ansible.builtin.include_tasks: core.yml
-  when:
-    - ansible_os_family == "RedHat"
-    - ansible_distribution_major_version|int >= 7
-    - ansible_distribution != "Fedora" or ( ansible_distribution == "Fedora" and ansible_distribution_major_version|int >= 34 )

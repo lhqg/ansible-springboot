@@ -1,0 +1,83 @@
+---
+# vars file for springboot instance
+
+# systemd service unit name
+springboot_instance__service_name: "springboot@{{ springboot_instance__appname }}"
+
+# keywords for audit rules
+springboot_instance__audit_keyword_read: ""
+springboot_instance__audit_keyword_write: ""
+
+# Directories where the Spring Boot app is deployed, and where it works
+springboot_instance__appbase: "/opt/springboot/{{ springboot_instance__appname }}"
+springboot_instance__appbase_mode: "0750"
+
+springboot_instance__service_env_filename: "/opt/springboot/{{ springboot_instance__appname }}/env"
+springboot_instance__jar_location: "{{ springboot_instance__appbase }}/lib"
+springboot_instance__appbase_conf_location: "{{ springboot_instance__appbase }}/conf"
+springboot_instance__java_security_file: "{{ springboot_instance__appbase_conf_location }}/java.security"
+springboot_instance__keystores_dest: "{{ springboot_instance__appbase }}/keys"
+springboot_instance__log_dir: "/var/log/springboot/{{ springboot_instance__appname }}"
+springboot_instance__srv_dir: "/srv/springboot/{{ springboot_instance__appname }}"
+
+# Dir permissions for "{{ springboot_instance__appbase }}/run/"
+#   used to store the running transient files
+springboot_instance__run_dir: "{{ springboot_instance__appbase }}/run"
+springboot_instance__run_dir_mode: "0750"
+
+# Dir/files permissions for "{{ springboot_instance__jar_location }}/"
+#   and "{{ springboot_instance__jar_location }}/{{ springboot_instance__appjarname }}"
+#   ( of course, the user running the application must be able to read)
+springboot_instance__app_mode: "0750"
+
+# Dir/files permissions for "{{ springboot_instance__appbase_conf_location }}/" ,
+#   "{{ springboot_instance__appbase_conf_location }}//each_conf-dir/"
+#   and "{{ springboot_instance__appbase_conf_location }}//each_conf-dir/each_conf-file":
+springboot_instance__conf_mode: "0750"
+
+# Dir permissions "{{ springboot_instance__log_dir }}/"
+#    used to store the running jar logs
+springboot_instance__log_dir_mode: "0750"
+
+# Dir/files permissions for "{{ springboot_instance__keystores_dest }}/"
+#   "{{ springboot_instance__keystores_dest }}/each_copied_keystore_file"
+springboot_instance__keystores_mode: "0750"
+
+# List of folders to create
+springboot_instance__folders:
+  - name: "bin"
+    path: "{{ springboot_instance__appbase }}/bin"
+    mode: "{{ springboot_instance__bin_mode }}"
+    owner: "springboot"
+    group: "springboot"
+    seltype: "springboot_bin_t"
+  - name: "run"
+    path: "{{ springboot_instance__run_dir }}"
+    mode: "{{ springboot_instance__run_dir_mode }}"
+    owner: "springboot"
+    group: "springboot"
+    seltype: "springboot_run_t"
+  - name: "app"
+    path: "{{ springboot_instance__jar_location }}"
+    mode: "{{ springboot_instance__app_mode }}"
+    owner: "springboot"
+    group: "springboot"
+    seltype: "springboot_lib_t"
+  - name: "conf"
+    path: "{{ springboot_instance__appbase_conf_location }}"
+    mode: "{{ springboot_instance__conf_mode }}"
+    owner: "springboot"
+    group: "springboot"
+    seltype: "springboot_conf_t"
+  - name: "log"
+    path: "{{ springboot_instance__log_dir }}"
+    mode: "{{ springboot_instance__log_dir_mode }}"
+    owner: "springboot"
+    group: "springboot"
+    seltype: "springboot_log_t"
+
+# WARNING:
+#  The folders {{ springboot_instance__extra_files_dest }} shouldn't be automatically created by using {{ springboot_instance__folders }}
+#      since the default is the same with springboot_instance__jar_location and might affect the rights of this folder !
+
+...
