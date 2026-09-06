@@ -8,7 +8,7 @@ springboot_instance__service_name: "springboot@{{ springboot_instance__appname }
 springboot_instance__audit_keyword_read: ""
 springboot_instance__audit_keyword_write: ""
 
-# Directories where the Spring Boot app is deployed, and where it works
+# Directories where the Springboot app is deployed, and where it works
 springboot_instance__appbase: "/opt/springboot/{{ springboot_instance__appname }}"
 springboot_instance__appbase_mode: "0750"
 
@@ -47,7 +47,7 @@ springboot_instance__keystores_mode: "0750"
 springboot_instance__folders:
   - name: "bin"
     path: "{{ springboot_instance__appbase }}/bin"
-    mode: "{{ springboot_instance__bin_mode }}"
+    mode: "{{ springboot_instance__bin_mode | default(springboot_instance__appbase_mode) }}"
     owner: "springboot"
     group: "springboot"
     seltype: "springboot_bin_t"

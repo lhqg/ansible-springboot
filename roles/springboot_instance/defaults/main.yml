@@ -6,6 +6,8 @@ springboot_instance__become: true
 springboot_instance__workdir: /var/tmp/springboot
 springboot_instance__conf_src: "{{ playbook_dir }}/files/conf"
 
+springboot_instance__app_main_config_file: "application.properties"
+
 springboot_instance__run_handlers: true
 springboot_instance__cleanup_entire_workdir: false
 springboot_instance__extra_files_dest: "{{ springboot_instance__jar_location }}"

@@ -20,7 +20,9 @@
     setype: springboot_monitoring_port_t
     state: present
   become: "{{ springboot_instance__become }}"
-  when: "springboot_instance__monitoring_port is defined"
+  when:
+    - "springboot_instance__monitoring_port is defined"
+    - "springboot_instance__monitoring_port | int > 0"
 
 - name: "Switch SELinux boolean to allow Springboot application to create and map/execute dynamic libraries"
   ansible.posix.seboolean:

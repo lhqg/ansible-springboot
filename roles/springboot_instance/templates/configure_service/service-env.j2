@@ -44,12 +44,12 @@ JAVA_EXTRA_ARGS="{{ springboot_instance__java_extra_args }}"
 JAVA_SECURITY_FILE=${CNF_DIR}}/java.security
 
 # Define the main Springboot application configuration file
-SPRING_CONFIG_LOCATION="{{ springboot_instance__spring_config_location }}"
+SPRING_CONFIG_LOCATION="{{ springboot_instance__appbase_conf_location }}/{{ springboot_instance__app_main_config_file }}"
 
 # Wait no longer that this amount of time to check if the Java process doesn't die prematurely
 STARTUP_POSTCHECK_TIMEOUT="{{ springboot_instance__startup_timeout_sec }}"
 
-{% if i18n_lang -%}
+{% if springboot_instance__i18n_lang -%}
 # Set then i18n locale/language environment
 LANG="{{ springboot_instance__i18n_lang }}"
 {% endif %}

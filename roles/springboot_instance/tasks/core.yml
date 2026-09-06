@@ -8,16 +8,15 @@
 - name: "SELinux typing"
   ansible.builtin.include_tasks: selinux.yml
 
-- name: "Install Java packages"
-  ansible.builtin.include_tasks: java.yml
-
 - name: "Create directories for {{ springboot_instance__appname }}"
   ansible.builtin.include_tasks: directories.yml
 
+- name: "Install Java packages"
+  ansible.builtin.include_tasks: java.yml
+
 - name: "Register Springboot service (RHEL 7 and higher)"
   ansible.builtin.include_tasks: configure_service.yml
-  when:
-    - springboot_instance__become
+  when: "springboot_instance__become or ansible_user_id == 'root'"
 
 - name: "Deploy application files for {{ springboot_instance__appname }}"
   ansible.builtin.include_tasks: app_deploy.yml

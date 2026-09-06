@@ -31,7 +31,7 @@ argument_specs:
       springboot_foundation__dedicated_vg_opt:
         description: LVM volume group for /opt/springboot
         type: str
-        default: None
+        default: ~
         required: false
       springboot_foundation__dedicated_lv_srv:
         description: Whether to create a dedicated LVM logical volume for /srv/springboot
@@ -41,7 +41,7 @@ argument_specs:
       springboot_foundation__dedicated_vg_srv:
         description: LVM volume group for /srv/springboot
         type: str
-        default: None
+        default: ~
         required: false
       springboot_foundation__dedicated_lv_log:
         description: Whether to create a dedicated LVM logical volume for /var/log/springboot
@@ -51,7 +51,7 @@ argument_specs:
       springboot_foundation__dedicated_vg_log:
         description: LVM volume group for /var/log/springboot
         type: str
-        default: None
+        default: ~
         required: false
       springboot_foundation__default_fs_size_g:
         description: Default filesystem size (GiB)for Springboot applications
