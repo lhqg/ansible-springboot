@@ -1,22 +1,11 @@
 ---
 breaking_changes:
-  - title: "Important Refactoring"
-    description: >-
-      The project has undergone a significant refactoring to improve maintainability and scalability.
-      This may affect existing integrations and require updates to your code.
-    impact: "High"
-    action_required: "Review the refactored code and update your integrations accordingly."
+  - "Important Refactoring"
 
 bug_fixes:
-  - title: "Fixed typos, tasks order, variable names"
-    description: "Resolved typos and reorganized tasks for better logic flow."
-    impact: "Medium"
-    action_required: "Ensure that your code handles user data correctly and update any affected roles."
+  - "Fixed typos, tasks order, variable names"
 
 minor_changes:
-  - title: "Updated dependencies, linting, and formatting"
-    description: "Upgraded various dependencies to their latest versions."
-    impact: "Low"
-    action_required: "Test your application to ensure compatibility with the updated dependencies."
+  - "Updated dependencies, linting, and formatting"
 
 ...
