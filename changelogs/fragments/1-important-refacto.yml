@@ -2,7 +2,7 @@
 breaking_changes:
   - "Important Refactoring"
 
-bug_fixes:
+bugfixes:
   - "Fixed typos, tasks order, variable names"
 
 minor_changes:
