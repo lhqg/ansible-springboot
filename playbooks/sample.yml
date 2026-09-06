@@ -1,0 +1,24 @@
+---
+- name: "Sample playbook to test Ansible Springboot roles"
+  hosts: all
+  gather_facts: true
+
+  vars:
+    _become: false
+
+  roles:
+    - role: springboot_foundation
+      vars:
+        springboot_foundation__become: "{{ _become }}"
+        springboot_foundation__dedicated_vg_opt: "vg_springboot"
+        springboot_foundation__dedicated_vg_srv: "vg_springboot"
+        springboot_foundation__dedicated_vg_log: "vg_springboot"
+
+    - role: springboot_instance
+      vars:
+        springboot_instance__become: "{{ _become }}"
+        springboot_instance__appname: "sample"
+        springboot_instance__appjarname: "sample-1.0.0.jar"
+        springboot_instance__enable_service: false
+
+...

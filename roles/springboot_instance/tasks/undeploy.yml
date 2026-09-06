@@ -1,0 +1,47 @@
+---
+
+- name: "Attempt to stop instance"
+  ansible.builtin.include_tasks: stop_instance.yml
+
+- name: "Remove Springboot service"
+  ansible.builtin.include_tasks: remove_service.yml
+
+- name: Remove Spring Boot app files
+  block:
+    - name: Find extra files
+      ansible.builtin.find:
+        paths: "{{ springboot_instance__extra_files_src }}"
+      when: springboot_instance__extra_files_src is defined and springboot_instance__remove_extra_files
+      register: springboot_instance__found_extra_files
+      delegate_to: localhost
+
+    - name: Find keystores
+      ansible.builtin.find:
+        paths: "{{ springboot_instance__keystores_src }}"
+      when: springboot_instance__keystores_src is defined and springboot_instance__remove_keystores
+      register: springboot_instance__found_keystores
+      delegate_to: localhost
+
+    - name: Remove extra files
+      ansible.builtin.file:
+        state: absent
+        path: "{{ springboot_instance__extra_files_dest }}/{{ _path }}"
+      loop: "{{ found_extra_files.files | map(attribute='path') | regex_replace(springboot_instance__extra_files_src | regex_escape() + '/', '') }}"
+      loop_control:
+        loop_var: _path
+      when: springboot_instance__extra_files_src is defined and springboot_instance__remove_extra_files
+      become: "{{ springboot_instance__become }}"
+
+    - name: Remove main application folder /opt
+      ansible.builtin.file:
+        state: absent
+        path: "{{ springboot_instance__appbase }}"
+      become: "{{ springboot_instance__become }}"
+
+    - name: Remove main application folder /srv
+      ansible.builtin.file:
+        state: absent
+        path: "{{ springboot_instance__srv_dir }}"
+      become: "{{ springboot_instance__become }}"
+
+...

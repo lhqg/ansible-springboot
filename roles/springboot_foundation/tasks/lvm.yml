@@ -1,0 +1,78 @@
+---
+
+- name: "Create LV for /opt/springboot"
+  community.general.lvol:
+    vg: "{{ springboot_foundation__dedicated_vg_opt }}"
+    lv: lv_opt_springboot
+    size: "{{ springboot_foundation__default_fs_size_g }}g"
+    state: present
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_opt"
+
+- name: "Initialise the XFS filesystem for /opt/springboot"
+  community.general.filesystem:
+    fstype: "{{ springboot_foundation__fstype }}"
+    dev: "/dev/{{ springboot_foundation__dedicated_vg_opt }}/lv_opt_springboot"
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_opt"
+
+- name: "Mount /opt/springboot LV/FS"
+  ansible.posix.mount:
+    path: /opt/springboot
+    src: "/dev/{{ springboot_foundation__dedicated_vg_opt }}/lv_opt_springboot"
+    fstype: "{{ springboot_foundation__fstype }}"
+    state: mounted
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_opt"
+
+- name: "Create LV for /srv/springboot"
+  community.general.lvol:
+    vg: "{{ springboot_foundation__dedicated_vg_srv }}"
+    lv: lv_srv_springboot
+    size: "{{ springboot_foundation__default_fs_size_g }}g"
+    state: present
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_srv"
+
+- name: "Initialise the XFS filesystem for /srv/springboot"
+  community.general.filesystem:
+    fstype: "{{ springboot_foundation__fstype }}"
+    dev: "/dev/{{ springboot_foundation__dedicated_vg_srv }}/lv_srv_springboot"
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_srv"
+
+- name: "Mount /srv/springboot LV/FS"
+  ansible.posix.mount:
+    path: /srv/springboot
+    src: "/dev/{{ springboot_foundation__dedicated_vg_srv }}/lv_srv_springboot"
+    fstype: "{{ springboot_foundation__fstype }}"
+    state: mounted
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_srv"
+
+- name: "Create LV for /var/log/springboot"
+  community.general.lvol:
+    vg: "{{ springboot_foundation__dedicated_vg_log }}"
+    lv: lv_log_springboot
+    size: "{{ springboot_foundation__default_fs_size_g }}g"
+    state: present
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_log"
+
+- name: "Initialise the XFS filesystem for /var/log/springboot"
+  community.general.filesystem:
+    fstype: "{{ springboot_foundation__fstype }}"
+    dev: "/dev/{{ springboot_foundation__dedicated_vg_log }}/lv_log_springboot"
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_log"
+
+- name: "Mount /var/log/springboot LV/FS"
+  ansible.posix.mount:
+    path: /var/log/springboot
+    src: "/dev/{{ springboot_foundation__dedicated_vg_log }}/lv_log_springboot"
+    fstype: "{{ springboot_foundation__fstype }}"
+    state: mounted
+  become: "{{ springboot_foundation__become }}"
+  when: "springboot_foundation__dedicated_lv_log"
+
+...

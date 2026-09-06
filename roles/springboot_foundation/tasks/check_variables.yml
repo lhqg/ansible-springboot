@@ -1,0 +1,37 @@
+---
+
+- name: "Check for mandatory variables"
+  ansible.builtin.fail:
+    msg: "{{ _var }} was not defined. Please check the role documentation."
+  when: "vars[_var] is not defined"
+  loop:
+    - springboot_foundation__user_id
+    - springboot_foundation__group_id
+    - springboot_foundation__dedicated_lv_opt
+    - springboot_foundation__dedicated_lv_srv
+    - springboot_foundation__dedicated_lv_log
+  loop_control:
+    loop_var: _var
+
+- name: "Check for LVM consistency on /opt/springboot LV/FS"
+  ansible.builtin.fail:
+    msg: "springboot_foundation__dedicated_vg_opt must be defined."
+  when:
+    - "springboot_foundation__dedicated_lv_opt"
+    - "springboot_foundation__dedicated_vg_opt is not defined"
+
+- name: "Check for LVM consistency on /srv/springboot LV/FS"
+  ansible.builtin.fail:
+    msg: "springboot_foundation__dedicated_vg_srv must be defined."
+  when:
+    - "springboot_foundation__dedicated_lv_srv"
+    - "springboot_foundation__dedicated_vg_srv is not defined"
+
+- name: "Check for LVM consistency on /var/log/springboot LV/FS"
+  ansible.builtin.fail:
+    msg: "springboot_foundation__dedicated_vg_log must be defined."
+  when:
+    - "springboot_foundation__dedicated_lv_log"
+    - "springboot_foundation__dedicated_vg_log is not defined"
+
+...

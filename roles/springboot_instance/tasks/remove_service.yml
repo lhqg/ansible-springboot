@@ -1,0 +1,28 @@
+---
+# Remove Spring Boot app service
+# - name: Stop service
+#   ansible.builtin.service:
+#     name: "{{ springboot_instance__service_name }}"
+#     state: stopped
+#   become: "{{ springboot_instance__become }}"
+
+- name: Disable spring boot service
+  ansible.builtin.systemd:
+    name: "{{ springboot_instance__service_name }}"
+    enabled: false
+    daemon_reload: true
+  become: "{{ springboot_instance__become }}"
+
+- name: Remove service env file
+  ansible.builtin.file:
+    path: "{{ springboot_instance__service_env_filename }}"
+    state: absent
+  become: "{{ springboot_instance__become }}"
+
+- name: Remove systemd directory
+  ansible.builtin.file:
+    path: "/etc/systemd/system/springboot@{{ springboot_instance__appname }}.d"
+    state: absent
+  become: "{{ springboot_instance__become }}"
+
+...

@@ -1,0 +1,44 @@
+---
+- name: "Deploy audit rules for READ critical filesystem objects of {{ springboot_instance__appname }}"
+  ansible.builtin.template:
+    src: audits/audit-rules_read.j2
+    dest: "/etc/audit/rules.d/{{ springboot_instance__audit_rules_ordering }}-{{ springboot_instance__appname }}-read.rules"
+    owner: root
+    group: root
+    mode: "0400"
+    seuser: system_u
+    serole: object_r
+    setype: auditd_etc_t
+  become: "{{ springboot_instance__become }}"
+  when: springboot_instance__audit_keyword_read is defined and springboot_instance__audit_keyword_read|length > 0
+
+- name: "Deploy audit rules for WRITE critical filesystem objects of {{ springboot_instance__appname }}"
+  ansible.builtin.template:
+    src: audits/audit-rules_write.j2
+    dest: "/etc/audit/rules.d/{{ springboot_instance__audit_rules_ordering }}-{{ springboot_instance__appname }}-write.rules"
+    owner: root
+    group: root
+    mode: "0400"
+    seuser: system_u
+    serole: object_r
+    setype: auditd_etc_t
+  become: "{{ springboot_instance__become }}"
+  when: springboot_instance__audit_keyword_write is defined and springboot_instance__audit_keyword_write|length > 0
+
+- name: "Attempt to refresh Audit subsystem with new rules for {{ springboot_instance__appname }}"
+  block:
+    - name: "Refresh Audit subsystem with new rules for {{ springboot_instance__appname }}"
+      ansible.builtin.shell: >
+        /bin/bash -c "augenrules --load"
+      changed_when: true
+      become: "{{ springboot_instance__become }}"
+  rescue:
+    - name: "Rescue - Refresh Audit subsystem with new rules for {{ springboot_instance__appname }}"
+      ansible.builtin.debug:
+        msg: >
+          WARNING: Failed to refresh the Auditing subsystem with the new rules
+          to watch the {{ springboot_instance__appname }} Springboot application resources.
+          Probable cause is the Audit rules are protected and cannot be altered
+          after the system is booted.
+
+...

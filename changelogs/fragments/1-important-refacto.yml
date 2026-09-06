@@ -1,0 +1,11 @@
+---
+breaking_changes:
+  - "Important Refactoring"
+
+bugfixes:
+  - "Fixed typos, tasks order, variable names"
+
+minor_changes:
+  - "Updated dependencies, linting, and formatting"
+
+...

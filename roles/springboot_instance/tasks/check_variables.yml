@@ -1,0 +1,40 @@
+---
+
+- name: "Check for mandatory variables"
+  ansible.builtin.fail:
+    msg: "{{ _var }} was not defined. Please check the role documentation."
+  when: vars[_var] is not defined
+  loop:
+    - springboot_instance__appname
+    - springboot_instance__app_version
+    - springboot_instance__appjarname
+    - springboot_instance__java_version
+    - springboot_instance__java_flavour
+  loop_control:
+    loop_var: _var
+
+- name: "Check for reserved variables"
+  ansible.builtin.fail:
+    msg: "{{ _var }} variable is reserved for the role ansible-role-springboot ! Shouldn't be set/initialized !"
+  when: vars[_var] is defined
+  loop:
+    - springboot_instance__service_stat_result
+    - springboot_instance__systemd_result
+    - springboot_instance__instance_stat_result
+    - springboot_instance__proc_stat_result
+    - springboot_instance__wait_for_pid
+    - springboot_instance__pkill_output_cmd
+    - springboot_instance__find_conf_files
+  loop_control:
+    loop_var: _var
+- name: "Check consistentcy for dynamic libraries enabling"
+  ansible.builtin.fail:
+    msg: "Variable springboot_instance__dynlib_dir_property must be defined when springboot_instance__enable_dynlibs is true !"
+  when: springboot_instance__enable_dynlibs and springboot_instance__dynlib_dir_property is not defined
+
+- name: "Check consistentcy for JVM memory options"
+  ansible.builtin.fail:
+    msg: "Variable springboot_instance__memory_max_heapsize_mb must be greater than or equal to springboot_instance__memory_min_heapsize_mb !"
+  when: springboot_instance__memory_max_heapsize_mb < springboot_instance__memory_min_heapsize_mb
+
+...

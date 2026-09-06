@@ -1,0 +1,13 @@
+---
+# Definition of defaults file for ansible-role-springboot_foundation
+
+springboot_foundation__become: true
+
+springboot_foundation__user_id: 5000
+springboot_foundation__group_id: 5000
+
+springboot_foundation__systemd_target_enabled: true
+
+springboot_foundation__default_fs_size_g: 1
+
+...

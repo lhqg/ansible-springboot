@@ -1,0 +1,34 @@
+---
+# Register a new Spring Boot app service
+- name: "Install Springboot service environment file"
+  ansible.builtin.template:
+    src: configure_service/service-env.j2
+    dest: "{{ springboot_instance__service_env_filename }}"
+    owner: springboot
+    group: springboot
+    mode: "0400"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_conf_t
+  become: "{{ springboot_instance__become }}"
+
+- name: "Create overrides directory for Springboot service instance for {{ springboot_instance__appname }}"
+  ansible.builtin.file:
+    path: "/etc/systemd/system/springboot@{{ springboot_instance__appname }}.d"
+    state: directory
+    owner: root
+    group: root
+    mode: "0555"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_unit_file_t
+  become: "{{ springboot_instance__become }}"
+
+- name: "Start and enable boot-time start for {{ springboot_instance__appname }}"
+  ansible.builtin.systemd:
+    name: "{{ springboot_instance__service_name }}"
+    enabled: "{{ springboot_instance__start_at_boot }}"
+    daemon_reload: true
+  become: "{{ springboot_instance__become }}"
+
+...

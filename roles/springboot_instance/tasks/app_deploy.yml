@@ -1,0 +1,154 @@
+---
+- name: "Copy Springboot application"
+  ansible.builtin.copy:
+    remote_src: true
+    src: "{{ springboot_instance__workdir }}/{{ springboot_instance__appjarname }}"
+    dest: "{{ springboot_instance__jar_location }}/"
+    owner: "springboot"
+    group: "springboot"
+    mode: "{{ springboot_instance__app_mode }}"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_lib_t
+  become: "{{ springboot_instance__become }}"
+  notify:
+    - "Start Springboot instance"
+    - "Cleanup workdir"
+
+- name: "Get conf structure"
+  ansible.builtin.find:
+    path: "{{ springboot_instance__conf_src }}"
+    recurse: true
+    file_type: any
+  register: springboot_instance__find_conf_files
+  delegate_to: localhost
+
+- name: "Create the conf subdirectories in {{ springboot_instance__appbase_conf_location }}"
+  ansible.builtin.file:
+    path: "{{ _file.path | regex_replace(springboot_instance__conf_src | regex_escape(), springboot_instance__appbase_conf_location) }}"
+    state: directory
+    owner: springboot
+    group: springboot
+    mode: "{{ springboot_instance__conf_mode }}"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_conf_t
+  loop: "{{ springboot_instance__find_conf_files.files }}"
+  loop_control:
+    loop_var: _file
+  when: _file.isdir
+  become: "{{ springboot_instance__become }}"
+
+- name: "Copy Springboot conf files in {{ springboot_instance__appbase_conf_location }}"
+  ansible.builtin.template:
+    src: "{{ _file.path }}"
+    dest: "{{ _file.path | regex_replace(springboot_instance__conf_src | regex_escape(), springboot_instance__appbase_conf_location) }}"
+    owner: springboot
+    group: springboot
+    mode: "{{ springboot_instance__conf_mode }}"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_conf_t
+  become: "{{ springboot_instance__become }}"
+  loop: "{{ springboot_instance__find_conf_files.files }}"
+  loop_control:
+    loop_var: _file
+  when: not _file.isdir
+  notify:
+    - "Cleanup workdir"
+
+- name: "Copy Springboot Java security properties file to {{ springboot_instance__java_security_file }}"
+  ansible.builtin.template:
+    src: "{{ springboot_instance__java_security_file_src }}"
+    dest: "{{ springboot_instance__java_security_file }}"
+    owner: springboot
+    group: springboot
+    mode: "{{ springboot_instance__conf_mode }}"
+    seuser: system_u
+    serole: object_r
+    setype: springboot_conf_t
+  become: "{{ springboot_instance__become }}"
+  when:
+    - springboot_instance__java_security_file_src is defined
+    - springboot_instance__java_security_file_src|length > 0
+  notify:
+    - "Cleanup workdir"
+
+- name: "Create and populate extra files subdirectory {{ springboot_instance__extra_files_dest }}"
+  when:
+    - springboot_instance__extra_files_src is defined and springboot_instance__extra_files_src|length > 0
+    - springboot_instance__extra_files_dest is defined and springboot_instance__extra_files_dest|length >0
+  block:
+    - name: "Create subdir springboot_instance__extra_files_dest={{ springboot_instance__extra_files_dest }}"
+      # (in case is different than springboot_instance__appbase,
+      #   springboot_instance__appbase_conf_location,
+      #   and springboot_instance__jar_location)
+      ansible.builtin.file:
+        path: "{{ springboot_instance__extra_files_dest }}"
+        state: directory
+        owner: springboot
+        group: springboot
+        mode: "{{ springboot_instance__extra_files_mode }}"
+        seuser: system_u
+        serole: object_r
+      when:
+        - springboot_instance__extra_files_dest != springboot_instance__appbase
+        - springboot_instance__extra_files_dest != springboot_instance__appbase_conf_location
+        - springboot_instance__extra_files_dest != springboot_instance__jar_location
+      become: "{{ springboot_instance__become }}"
+    - name: "Copy other/extra files needed by the application from {{ springboot_instance__extra_files_dest }}"
+      ansible.builtin.copy:
+        src: "{{ springboot_instance__extra_files_src }}/"
+        dest: "{{ springboot_instance__extra_files_dest }}/"
+        owner: springboot
+        group: springboot
+        mode: "{{ springboot_instance__extra_files_mode }}"
+        seuser: system_u
+        serole: object_r
+      become: "{{ springboot_instance__become }}"
+
+- name: "Create and populate keystores subdirectory {{ springboot_instance__keystores_dest }}"
+  when:
+    - springboot_instance__keystores_src is defined and springboot_instance__keystores_src|length > 0
+    - springboot_instance__keystores_dest is defined and springboot_instance__keystores_dest|length >0
+  block:
+    - name: "Create subdir springboot_instance__keystores_dest={{ springboot_instance__keystores_dest }}"
+    # (in case is different than springboot_instance__appbase,
+    #   springboot_instance__appbase_conf_location=,
+    #   springboot_instance__extra_files_dest,
+    #   and springboot_instance__jar_location)
+      ansible.builtin.file:
+        path: "{{ springboot_instance__keystores_dest }}"
+        state: directory
+        owner: springboot
+        group: springboot
+        mode: "{{ springboot_instance__keystores_mode }}"
+        seuser: system_u
+        serole: object_r
+        setype: springboot_auth_t
+      become: "{{ springboot_instance__become }}"
+      when:
+        - springboot_instance__keystores_dest != springboot_instance__appbase
+        - springboot_instance__keystores_dest != springboot_instance__appbase_conf_location
+        - springboot_instance__keystores_dest != springboot_instance__extra_files_dest
+        - springboot_instance__keystores_dest != springboot_instance__jar_location
+
+    - name: "Copy keystores & certificates from {{ springboot_instance__keystores_dest }}"
+      ansible.builtin.copy:
+        src: "{{ springboot_instance__keystores_src }}/"
+        dest: "{{ springboot_instance__keystores_dest }}/"
+        owner: springboot
+        group: springboot
+        mode: "{{ springboot_instance__keystores_mode }}"
+        seuser: system_u
+        serole: object_r
+        setype: springboot_auth_t
+      become: "{{ springboot_instance__become }}"
+
+- name: "Restore SELinux file contexts for Springboot instance"
+  ansible.builtin.shell: >
+    bash -c "/sbin/restorecon -RFi {{ springboot_instance__appbase }} {{ springboot_instance__log_dir }} {{ springboot_instance__srv_dir }}"
+  changed_when: true
+  become: "{{ springboot_instance__become }}"
+
+...
