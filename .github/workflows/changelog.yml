@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Run Changelog CI
-        uses: saadmk11/changelog-ci@v2.0.2
+        uses: saadmk11/changelog-ci@v2.0.3
         with:
           release_version: ${{ inputs.release_version }}
           config_file: changelog-ci-config.yml
